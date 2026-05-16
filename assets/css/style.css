@@ -1,153 +1,556 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+:root {
+  --bg: #f5f7fb;
+  --bg-soft: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --card: #ffffff;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  --radius: 22px;
+}
 
-  <title>Toán 11 - Học kỳ 2</title>
+body.dark {
+  --bg: #0f172a;
+  --bg-soft: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --border: #243044;
+  --card: #111827;
+  --accent: #60a5fa;
+  --accent-soft: rgba(96, 165, 250, 0.16);
+  --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+}
 
-  <link rel="stylesheet" href="assets/css/style.css" />
+* {
+  box-sizing: border-box;
+}
 
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['\\(', '\\)'], ['$', '$']],
-        displayMath: [['\\[', '\\]']]
-      },
-      chtml: {
-        scale: 1
-      }
-    };
-  </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-</head>
+html {
+  scroll-behavior: smooth;
+}
 
-<body>
-  <header class="topbar">
-    <a class="brand" href="index.html">
-      <span class="brand-logo">11</span>
-      <span>Toán 11 - Học kỳ 2</span>
-    </a>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.13), transparent 35%),
+    var(--bg);
+  color: var(--text);
+}
 
-    <nav class="nav">
-      <a href="#topics">Chuyên đề</a>
-      <a href="#problems">Bài tập</a>
-      <a href="#guide">Hướng dẫn</a>
-    </nav>
-  </header>
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-  <main>
-    <section class="hero">
-      <div class="hero-text">
-        <p class="eyebrow">Kho bài tập lớp 11</p>
-        <h1>Website tổng hợp bài tập Toán 11 học kỳ 2</h1>
-        <p>
-          Gồm Mũ và Logarit, Đạo hàm, Hình học không gian vuông góc và Xác suất.
-          Có tìm kiếm, lọc chuyên đề, lọc dạng bài và xem lời giải.
-        </p>
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 72px;
+  padding: 0 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
 
-        <div class="hero-actions">
-          <a class="btn primary" href="#problems">Vào kho bài tập</a>
-          <a class="btn ghost" href="#topics">Xem chuyên đề</a>
-        </div>
-      </div>
+body.dark .topbar {
+  background: rgba(15, 23, 42, 0.78);
+}
 
-      <div class="hero-panel">
-        <h3>Thống kê nhanh</h3>
-        <div class="mini-stats">
-          <div>
-            <strong id="statTopic">0</strong>
-            <span>Chuyên đề lớn</span>
-          </div>
-          <div>
-            <strong id="statSubtopic">0</strong>
-            <span>Dạng bài</span>
-          </div>
-          <div>
-            <strong id="statProblem">0</strong>
-            <span>Bài tập mẫu</span>
-          </div>
-        </div>
-      </div>
-    </section>
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-    <section id="topics" class="section">
-      <div class="section-title">
-        <p class="eyebrow">Sơ đồ học kỳ 2</p>
-        <h2>Chuyên đề chính</h2>
-      </div>
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  font-size: 24px;
+  font-weight: 800;
+}
 
-      <div id="topicCards" class="topic-grid"></div>
-    </section>
+.brand strong {
+  display: block;
+  font-size: 17px;
+}
 
-    <section id="problems" class="section problem-section">
-      <div class="section-title">
-        <p class="eyebrow">Kho bài tập</p>
-        <h2>Danh sách bài tập</h2>
-      </div>
+.brand small {
+  display: block;
+  color: var(--muted);
+  margin-top: 2px;
+  font-size: 12px;
+}
 
-      <div class="workspace">
-        <aside class="sidebar">
-          <h3>Cây chuyên đề</h3>
-          <div id="topicTree" class="topic-tree"></div>
-        </aside>
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-        <section class="content">
-          <div class="filters">
-            <input id="searchInput" type="text" placeholder="Tìm bài tập, ví dụ: đạo hàm, logarit, xác suất..." />
+.nav a,
+.theme-btn,
+.filters button {
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  padding: 9px 13px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+}
 
-            <select id="topicFilter">
-              <option value="all">Tất cả chuyên đề</option>
-            </select>
+.nav a:hover,
+.theme-btn:hover,
+.filters button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
-            <select id="subtopicFilter">
-              <option value="all">Tất cả dạng bài</option>
-            </select>
+.layout {
+  width: min(1240px, calc(100% - 32px));
+  margin: 28px auto;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 22px;
+}
 
-            <select id="levelFilter">
-              <option value="all">Tất cả mức độ</option>
-              <option value="Dễ">Dễ</option>
-              <option value="Trung bình">Trung bình</option>
-              <option value="Khó">Khó</option>
-              <option value="HSG">HSG</option>
-            </select>
-          </div>
+.sidebar {
+  position: sticky;
+  top: 96px;
+  height: fit-content;
+}
 
-          <div class="result-line">
-            <span id="resultCount">Đang tải...</span>
-            <button id="resetBtn" class="small-btn">Xóa bộ lọc</button>
-          </div>
+.side-card,
+.card,
+.hero {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
 
-          <div id="problemList" class="problem-grid"></div>
-        </section>
-      </div>
-    </section>
+.side-card {
+  padding: 18px;
+}
 
-    <section id="guide" class="section guide">
-      <div class="section-title">
-        <p class="eyebrow">Cách thêm bài mới</p>
-        <h2>Chỉnh dữ liệu ở file <code>assets/js/data.js</code></h2>
-      </div>
+.side-card h3 {
+  margin: 0 0 14px;
+}
 
-      <p>
-        Muốn thêm bài tập mới, bạn chỉ cần thêm một object vào mảng <code>PROBLEMS</code>.
-        Không cần sửa HTML hay CSS.
-      </p>
-    </section>
-  </main>
+.topic-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  <div id="detailOverlay" class="overlay">
-    <div class="detail-box">
-      <button id="closeDetail" class="close-btn">×</button>
-      <div id="problemDetail"></div>
-    </div>
-  </div>
+.tree-topic {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
 
-  <footer class="footer">
-    © 2026 - Toán 11 Học kỳ 2
-  </footer>
+.tree-title {
+  width: 100%;
+  border: 0;
+  background: var(--bg-soft);
+  color: var(--text);
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+}
 
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/app.js"></script>
-</body>
-</html>
+.tree-title:hover {
+  color: var(--accent);
+}
+
+.tree-title.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tree-sub {
+  padding: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.tree-sub button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  padding: 7px 9px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.tree-sub button:hover,
+.tree-sub button.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.main-content {
+  display: grid;
+  gap: 22px;
+}
+
+.hero {
+  padding: 34px;
+  overflow: hidden;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 12px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.05;
+}
+
+.hero p {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.card {
+  padding: 24px;
+}
+
+.section-head {
+  margin-bottom: 18px;
+}
+
+.section-head h2 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.topic-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.topic-card {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  background: var(--bg-soft);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.topic-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+.topic-card h3 {
+  margin: 0 0 10px;
+}
+
+.topic-card ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 0.8fr auto;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.filters input,
+.filters select {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 12px;
+  outline: none;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: var(--accent);
+}
+
+.problem-count {
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.problem-list {
+  display: grid;
+  gap: 12px;
+}
+
+.problem-card {
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  border-radius: 18px;
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.problem-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.08);
+}
+
+.problem-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.problem-card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.problem-card p {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.level {
+  white-space: nowrap;
+}
+
+.level.easy {
+  background: rgba(34, 197, 94, 0.14);
+  color: #16a34a;
+}
+
+.level.medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.level.hard {
+  background: rgba(239, 68, 68, 0.14);
+  color: #dc2626;
+}
+
+/* VIEW GIỐNG CHATGPT */
+
+.view-body {
+  background: var(--bg);
+}
+
+.chat-shell {
+  width: min(900px, calc(100% - 28px));
+  margin: 28px auto 70px;
+}
+
+.chat-title {
+  margin-bottom: 24px;
+  padding: 20px;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.chat-title h1 {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 4vw, 38px);
+}
+
+.chat-title p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.chat-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.chat {
+  display: grid;
+  gap: 18px;
+}
+
+.message {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-weight: 800;
+}
+
+.avatar.user {
+  background: #111827;
+  color: white;
+}
+
+.avatar.bot {
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  color: white;
+}
+
+.bubble {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  background: var(--card);
+  line-height: 1.75;
+}
+
+.message.user-msg .bubble {
+  background: var(--bg-soft);
+}
+
+.bubble h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+
+.math-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.action-row a {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+
+.action-row a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.empty {
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--card);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .topic-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .topbar {
+    height: auto;
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .hero,
+  .card {
+    padding: 18px;
+  }
+
+  .message {
+    gap: 8px;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+  }
+}
