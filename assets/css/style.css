@@ -1,462 +1,153 @@
-:root {
-  --bg: #0f172a;
-  --bg2: #111827;
-  --card: rgba(255, 255, 255, 0.08);
-  --card2: rgba(255, 255, 255, 0.12);
-  --text: #f8fafc;
-  --muted: #cbd5e1;
-  --line: rgba(255, 255, 255, 0.14);
-  --accent: #38bdf8;
-  --accent2: #a78bfa;
-  --green: #22c55e;
-  --orange: #f97316;
-  --purple: #a855f7;
-  --blue: #38bdf8;
-  --red: #fb7185;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, sans-serif;
-  color: var(--text);
-  background:
-    radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(167, 139, 250, 0.22), transparent 30%),
-    linear-gradient(135deg, var(--bg), var(--bg2));
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-code {
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.12);
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding: 16px 7%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(15, 23, 42, 0.78);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 800;
-  font-size: 20px;
-}
-
-.logo {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.28);
-}
-
-.nav {
-  display: flex;
-  gap: 14px;
-}
-
-.nav a {
-  padding: 9px 13px;
-  border-radius: 999px;
-  color: var(--muted);
-  transition: 0.2s;
-}
-
-.nav a:hover {
-  color: white;
-  background: rgba(255,255,255,0.1);
-}
-
-.hero {
-  min-height: 70vh;
-  padding: 70px 7%;
-  display: grid;
-  grid-template-columns: 1.35fr 0.65fr;
-  gap: 35px;
-  align-items: center;
-}
-
-.tag {
-  display: inline-block;
-  margin: 0 0 14px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  color: #bae6fd;
-  background: rgba(56, 189, 248, 0.13);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  font-weight: 700;
-}
-
-.hero h1,
-.page-head h1 {
-  margin: 0;
-  max-width: 850px;
-  font-size: clamp(34px, 5vw, 64px);
-  line-height: 1.05;
-}
-
-.desc,
-.page-head p,
-.section-title p,
-.about p {
-  color: var(--muted);
-  line-height: 1.7;
-  font-size: 17px;
-}
-
-.hero-actions {
-  margin-top: 28px;
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 13px 20px;
-  border-radius: 999px;
-  font-weight: 800;
-  transition: 0.2s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn.primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: white;
-}
-
-.btn.ghost {
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,0.06);
-}
-
-.hero-card,
-.stat-card,
-.subject-card,
-.problem-card,
-.detail-card,
-.filter-box,
-.about {
-  border: 1px solid var(--line);
-  background: var(--card);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-  backdrop-filter: blur(12px);
-}
-
-.hero-card {
-  padding: 24px;
-  border-radius: 24px;
-}
-
-.hero-card h3 {
-  margin-top: 0;
-}
-
-.latest-list {
-  display: grid;
-  gap: 12px;
-}
-
-.latest-item {
-  display: block;
-  padding: 13px;
-  border-radius: 16px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid var(--line);
-}
-
-.latest-item span {
-  display: block;
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.stats {
-  padding: 0 7% 50px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.stat-card {
-  padding: 22px;
-  border-radius: 22px;
-}
-
-.stat-card strong {
-  display: block;
-  font-size: 28px;
-  margin-bottom: 7px;
-}
-
-.stat-card span {
-  color: var(--muted);
-}
-
-.section {
-  padding: 50px 7%;
-}
-
-.section-title {
-  margin-bottom: 24px;
-}
-
-.section-title h2,
-.about h2 {
-  font-size: 34px;
-  margin: 0;
-}
-
-.subject-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-}
-
-.subject-card {
-  min-height: 210px;
-  padding: 22px;
-  border-radius: 24px;
-  transition: 0.22s;
-}
-
-.subject-card:hover {
-  transform: translateY(-5px);
-  background: var(--card2);
-}
-
-.subject-card h3 {
-  margin: 0 0 12px;
-  font-size: 22px;
-}
-
-.subject-card p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.subject-card.algebra {
-  border-color: rgba(34, 197, 94, 0.45);
-}
-
-.subject-card.geo {
-  border-color: rgba(249, 115, 22, 0.45);
-}
-
-.subject-card.combi {
-  border-color: rgba(168, 85, 247, 0.45);
-}
-
-.subject-card.exam {
-  border-color: rgba(56, 189, 248, 0.45);
-}
-
-.page {
-  padding: 55px 7%;
-}
-
-.page-head {
-  margin-bottom: 28px;
-}
-
-.filter-box {
-  margin-bottom: 24px;
-  padding: 18px;
-  border-radius: 22px;
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 12px;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 13px 14px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  color: var(--text);
-  background: rgba(15, 23, 42, 0.75);
-  outline: none;
-}
-
-input::placeholder {
-  color: #94a3b8;
-}
-
-.count-text {
-  margin: 0 0 15px;
-  color: var(--muted);
-}
-
-.problem-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.problem-card {
-  padding: 20px;
-  border-radius: 22px;
-  transition: 0.2s;
-}
-
-.problem-card:hover {
-  transform: translateY(-4px);
-  background: var(--card2);
-}
-
-.problem-card h3 {
-  margin: 10px 0;
-  font-size: 20px;
-}
-
-.problem-card p {
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.badge {
-  display: inline-flex;
-  padding: 5px 9px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid var(--line);
-}
-
-.badge.easy {
-  color: #bbf7d0;
-}
-
-.badge.medium {
-  color: #fde68a;
-}
-
-.badge.hard {
-  color: #fecaca;
-}
-
-.badge.hsg {
-  color: #ddd6fe;
-}
-
-.detail-card {
-  max-width: 980px;
-  margin: auto;
-  padding: 30px;
-  border-radius: 26px;
-}
-
-.detail-card h1 {
-  margin: 14px 0 12px;
-  font-size: clamp(28px, 4vw, 45px);
-}
-
-.detail-section {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-
-.detail-section h2 {
-  margin-top: 0;
-}
-
-.math-block {
-  color: var(--text);
-  line-height: 1.75;
-  font-size: 18px;
-}
-
-.back-link {
-  display: inline-block;
-  margin-bottom: 18px;
-  color: #bae6fd;
-}
-
-.footer {
-  padding: 25px 7%;
-  color: var(--muted);
-  text-align: center;
-  border-top: 1px solid var(--line);
-}
-
-.empty {
-  padding: 30px;
-  border-radius: 20px;
-  text-align: center;
-  color: var(--muted);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--line);
-}
-
-@media (max-width: 980px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .subject-grid,
-  .problem-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .filter-box {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .topbar {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .nav {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .hero {
-    padding-top: 45px;
-  }
-
-  .stats,
-  .subject-grid,
-  .problem-grid {
-    grid-template-columns: 1fr;
-  }
-}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Toán 11 - Học kỳ 2</title>
+
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]']]
+      },
+      chtml: {
+        scale: 1
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span class="brand-logo">11</span>
+      <span>Toán 11 - Học kỳ 2</span>
+    </a>
+
+    <nav class="nav">
+      <a href="#topics">Chuyên đề</a>
+      <a href="#problems">Bài tập</a>
+      <a href="#guide">Hướng dẫn</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow">Kho bài tập lớp 11</p>
+        <h1>Website tổng hợp bài tập Toán 11 học kỳ 2</h1>
+        <p>
+          Gồm Mũ và Logarit, Đạo hàm, Hình học không gian vuông góc và Xác suất.
+          Có tìm kiếm, lọc chuyên đề, lọc dạng bài và xem lời giải.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn primary" href="#problems">Vào kho bài tập</a>
+          <a class="btn ghost" href="#topics">Xem chuyên đề</a>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <h3>Thống kê nhanh</h3>
+        <div class="mini-stats">
+          <div>
+            <strong id="statTopic">0</strong>
+            <span>Chuyên đề lớn</span>
+          </div>
+          <div>
+            <strong id="statSubtopic">0</strong>
+            <span>Dạng bài</span>
+          </div>
+          <div>
+            <strong id="statProblem">0</strong>
+            <span>Bài tập mẫu</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="topics" class="section">
+      <div class="section-title">
+        <p class="eyebrow">Sơ đồ học kỳ 2</p>
+        <h2>Chuyên đề chính</h2>
+      </div>
+
+      <div id="topicCards" class="topic-grid"></div>
+    </section>
+
+    <section id="problems" class="section problem-section">
+      <div class="section-title">
+        <p class="eyebrow">Kho bài tập</p>
+        <h2>Danh sách bài tập</h2>
+      </div>
+
+      <div class="workspace">
+        <aside class="sidebar">
+          <h3>Cây chuyên đề</h3>
+          <div id="topicTree" class="topic-tree"></div>
+        </aside>
+
+        <section class="content">
+          <div class="filters">
+            <input id="searchInput" type="text" placeholder="Tìm bài tập, ví dụ: đạo hàm, logarit, xác suất..." />
+
+            <select id="topicFilter">
+              <option value="all">Tất cả chuyên đề</option>
+            </select>
+
+            <select id="subtopicFilter">
+              <option value="all">Tất cả dạng bài</option>
+            </select>
+
+            <select id="levelFilter">
+              <option value="all">Tất cả mức độ</option>
+              <option value="Dễ">Dễ</option>
+              <option value="Trung bình">Trung bình</option>
+              <option value="Khó">Khó</option>
+              <option value="HSG">HSG</option>
+            </select>
+          </div>
+
+          <div class="result-line">
+            <span id="resultCount">Đang tải...</span>
+            <button id="resetBtn" class="small-btn">Xóa bộ lọc</button>
+          </div>
+
+          <div id="problemList" class="problem-grid"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="guide" class="section guide">
+      <div class="section-title">
+        <p class="eyebrow">Cách thêm bài mới</p>
+        <h2>Chỉnh dữ liệu ở file <code>assets/js/data.js</code></h2>
+      </div>
+
+      <p>
+        Muốn thêm bài tập mới, bạn chỉ cần thêm một object vào mảng <code>PROBLEMS</code>.
+        Không cần sửa HTML hay CSS.
+      </p>
+    </section>
+  </main>
+
+  <div id="detailOverlay" class="overlay">
+    <div class="detail-box">
+      <button id="closeDetail" class="close-btn">×</button>
+      <div id="problemDetail"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    © 2026 - Toán 11 Học kỳ 2
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
