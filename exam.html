@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Đềthi đã tạo</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+<script>
+window.MathJax = {
+tex: {
+inlineMath: [["\\(", "\\)"], ["$", "$"]],
+displayMath: [["\\[", "\\]"]]
+},
+svg: { fontCache: "global" }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body class="exam-body">
+<div class="no-print toolbar">
+<a class="btn btn-ghost" href="index.html">← Quay lại chọn đề</a>
+<button class="btn btn-primary" id="printBtn" type="button">Xuất PDF</button>
+</div>
+<main class="exam-paper" id="examPaper">
+<section class="exam-head">
+<div>
+<div class="school">TRƯỜNG THPT</div>
+<div class="line">TỔTOÁN</div>
+</div>
+<div class="exam-title-box">
+<h1 id="paperTitle">ĐỀKIỂM TRA TOÁN 11 - HỌC KỲ 2</h1>
+<p>Môn: Toán 11 &nbsp; | &nbsp; Thời gian: 90 phút</p>
+<p>Mã đề: <b id="paperCode">101</b></p>
+</div>
+</section>
+<div class="student-info">
+<span>Họ và tên: ...............................................................</span>
+<span>Lớp: ....................</span>
+</div>
+<section id="multipleChoiceSection"></section>
+<section id="trueFalseSection"></section>
+<section id="shortAnswerSection"></section>
+<section id="answerSection"></section>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/exam.js"></script>
+</body>
+</html>
