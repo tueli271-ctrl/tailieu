@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bài tập Toán 11</title>
+
+  <title>Toán 11 - Học kỳ 2</title>
 
   <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -13,108 +14,140 @@
         inlineMath: [['\\(', '\\)'], ['$', '$']],
         displayMath: [['\\[', '\\]']]
       },
-      svg: {
-        fontCache: 'global'
+      chtml: {
+        scale: 1
       }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <header class="topbar">
     <a class="brand" href="index.html">
-      <span class="logo">11</span>
-      <span>Bài tập Toán 11</span>
+      <span class="brand-logo">11</span>
+      <span>Toán 11 - Học kỳ 2</span>
     </a>
 
     <nav class="nav">
-      <a href="index.html">Trang chủ</a>
-      <a href="problems.html">Kho bài tập</a>
-      <a href="#about">Giới thiệu</a>
+      <a href="#topics">Chuyên đề</a>
+      <a href="#problems">Bài tập</a>
+      <a href="#guide">Hướng dẫn</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
-      <div class="hero-content">
-        <p class="tag">Tổng hợp bài tập lớp 11</p>
-        <h1>Kho bài tập Toán 11 có phân loại, tìm kiếm và lời giải.</h1>
-        <p class="desc">
-          Trang web này dùng để lưu trữ bài tập theo chuyên đề: Đại số - Giải tích,
-          Hình học, Tổ hợp - Xác suất và Đề tổng hợp.
+      <div class="hero-text">
+        <p class="eyebrow">Kho bài tập lớp 11</p>
+        <h1>Website tổng hợp bài tập Toán 11 học kỳ 2</h1>
+        <p>
+          Gồm Mũ và Logarit, Đạo hàm, Hình học không gian vuông góc và Xác suất.
+          Có tìm kiếm, lọc chuyên đề, lọc dạng bài và xem lời giải.
         </p>
 
         <div class="hero-actions">
-          <a class="btn primary" href="problems.html">Vào kho bài tập</a>
-          <a class="btn ghost" href="#subjects">Xem chuyên đề</a>
+          <a class="btn primary" href="#problems">Vào kho bài tập</a>
+          <a class="btn ghost" href="#topics">Xem chuyên đề</a>
         </div>
       </div>
 
-      <div class="hero-card">
-        <h3>Bài mới nhất</h3>
-        <div id="latestProblems" class="latest-list"></div>
+      <div class="hero-panel">
+        <h3>Thống kê nhanh</h3>
+        <div class="mini-stats">
+          <div>
+            <strong id="statTopic">0</strong>
+            <span>Chuyên đề lớn</span>
+          </div>
+          <div>
+            <strong id="statSubtopic">0</strong>
+            <span>Dạng bài</span>
+          </div>
+          <div>
+            <strong id="statProblem">0</strong>
+            <span>Bài tập mẫu</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="stats">
-      <div class="stat-card">
-        <strong id="totalProblems">0</strong>
-        <span>Tổng số bài</span>
-      </div>
-      <div class="stat-card">
-        <strong>4</strong>
-        <span>Chuyên đề</span>
-      </div>
-      <div class="stat-card">
-        <strong>MathJax</strong>
-        <span>Hỗ trợ công thức</span>
-      </div>
-    </section>
-
-    <section id="subjects" class="section">
+    <section id="topics" class="section">
       <div class="section-title">
-        <h2>Chuyên đề lớp 11</h2>
-        <p>Chọn một mảng kiến thức để luyện tập.</p>
+        <p class="eyebrow">Sơ đồ học kỳ 2</p>
+        <h2>Chuyên đề chính</h2>
       </div>
 
-      <div class="subject-grid">
-        <a class="subject-card algebra" href="problems.html?category=algebra">
-          <h3>Đại số - Giải tích</h3>
-          <p>Dãy số, giới hạn, đạo hàm, lượng giác, phương trình.</p>
-        </a>
+      <div id="topicCards" class="topic-grid"></div>
+    </section>
 
-        <a class="subject-card geo" href="problems.html?category=geometry">
-          <h3>Hình học</h3>
-          <p>Quan hệ song song, vuông góc, góc, khoảng cách trong không gian.</p>
-        </a>
+    <section id="problems" class="section problem-section">
+      <div class="section-title">
+        <p class="eyebrow">Kho bài tập</p>
+        <h2>Danh sách bài tập</h2>
+      </div>
 
-        <a class="subject-card combi" href="problems.html?category=combinatorics">
-          <h3>Tổ hợp - Xác suất</h3>
-          <p>Quy tắc đếm, chỉnh hợp, tổ hợp, nhị thức Newton, xác suất.</p>
-        </a>
+      <div class="workspace">
+        <aside class="sidebar">
+          <h3>Cây chuyên đề</h3>
+          <div id="topicTree" class="topic-tree"></div>
+        </aside>
 
-        <a class="subject-card exam" href="problems.html?category=exam">
-          <h3>Đề tổng hợp</h3>
-          <p>Các đề ôn tập, đề kiểm tra, đề nâng cao và đề HSG.</p>
-        </a>
+        <section class="content">
+          <div class="filters">
+            <input id="searchInput" type="text" placeholder="Tìm bài tập, ví dụ: đạo hàm, logarit, xác suất..." />
+
+            <select id="topicFilter">
+              <option value="all">Tất cả chuyên đề</option>
+            </select>
+
+            <select id="subtopicFilter">
+              <option value="all">Tất cả dạng bài</option>
+            </select>
+
+            <select id="levelFilter">
+              <option value="all">Tất cả mức độ</option>
+              <option value="Dễ">Dễ</option>
+              <option value="Trung bình">Trung bình</option>
+              <option value="Khó">Khó</option>
+              <option value="HSG">HSG</option>
+            </select>
+          </div>
+
+          <div class="result-line">
+            <span id="resultCount">Đang tải...</span>
+            <button id="resetBtn" class="small-btn">Xóa bộ lọc</button>
+          </div>
+
+          <div id="problemList" class="problem-grid"></div>
+        </section>
       </div>
     </section>
 
-    <section id="about" class="section about">
-      <h2>Giới thiệu</h2>
+    <section id="guide" class="section guide">
+      <div class="section-title">
+        <p class="eyebrow">Cách thêm bài mới</p>
+        <h2>Chỉnh dữ liệu ở file <code>assets/js/data.js</code></h2>
+      </div>
+
       <p>
-        Đây là website tĩnh chạy bằng GitHub Pages. Bạn chỉ cần thêm bài mới trong file
-        <code>assets/js/data.js</code>, web sẽ tự hiển thị ở trang kho bài tập.
+        Muốn thêm bài tập mới, bạn chỉ cần thêm một object vào mảng <code>PROBLEMS</code>.
+        Không cần sửa HTML hay CSS.
       </p>
     </section>
   </main>
 
+  <div id="detailOverlay" class="overlay">
+    <div class="detail-box">
+      <button id="closeDetail" class="close-btn">×</button>
+      <div id="problemDetail"></div>
+    </div>
+  </div>
+
   <footer class="footer">
-    © 2026 - Bài tập Toán 11
+    © 2026 - Toán 11 Học kỳ 2
   </footer>
 
   <script src="assets/js/data.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
