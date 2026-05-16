@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trang web đầu tiên</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f172a, #2563eb);
+      color: white;
+    }
+
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    header h1 {
+      font-size: 28px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .card {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .card p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    button {
+      padding: 12px 22px;
+      border: none;
+      border-radius: 999px;
+      background: white;
+      color: #2563eb;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Math Hub</h1>
+
+    <nav>
+      <a href="#">Trang chủ</a>
+      <a href="#">Bài tập</a>
+      <a href="#">Liên hệ</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Xin chào!</h2>
+      <p>
+        Đây là trang web đầu tiên của tôi được chạy bằng GitHub Pages.
+        Bạn có thể chỉnh sửa nội dung này thành trang bài tập, tài liệu học tập hoặc Math Hub.
+      </p>
+
+      <button onclick="alert('Trang web đã chạy thành công!')">
+        Bấm thử
+      </button>
+    </div>
+  </main>
+
+  <footer>
+    © 2026 - Trang web của tôi
+  </footer>
+</body>
+</html>
