@@ -1,94 +1,142 @@
+const viewRoot = document.getElementById("viewRoot");
+const themeBtn = document.getElementById("themeBtn");
+
+function initTheme() {
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeBtn.textContent = "☀️";
+  }
+
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeBtn.textContent = isDark ? "☀️" : "🌙";
+  });
+}
+
 function getParam(name) {
   const params = new URLSearchParams(window.location.search);
   return params.get(name);
 }
 
-function topicName(topicId) {
-  const topic = TOPICS.find(item => item.id === topicId);
-  return topic ? topic.name : "Không rõ chuyên đề";
+function getTopic(topicId) {
+  return TOPICS.find(topic => topic.id === topicId);
 }
 
-function subtopicName(topicId, subtopicId) {
-  const topic = TOPICS.find(item => item.id === topicId);
-  if (!topic) return "Không rõ dạng bài";
+function getSubtopic(topicId, subtopicId) {
+  const topic = getTopic(topicId);
+  if (!topic) return null;
 
-  const subtopic = topic.subtopics.find(item => item.id === subtopicId);
-  return subtopic ? subtopic.name : "Không rõ dạng bài";
+  return topic.subtopics.find(subtopic => subtopic.id === subtopicId);
+}
+
+function getLevelClass(level) {
+  if (level === "Dễ") return "easy";
+  if (level === "Trung bình") return "medium";
+  if (level === "Khó") return "hard";
+  return "";
+}
+
+function escapeHTML(text) {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function mathBlock(text) {
+  return `
+    <div class="math-content">${escapeHTML(text.trim())}</div>
+  `;
 }
 
 function typesetMath() {
   if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise();
+  } else {
+    setTimeout(typesetMath, 300);
   }
 }
 
-function renderProblem() {
-  const root = document.getElementById("viewRoot");
-  const id = getParam("id");
-
-  const problem = PROBLEMS.find(item => item.id === id);
-
-  if (!problem) {
-    root.innerHTML = `
-      <div class="error-box">
-        <h1>Không tìm thấy bài tập</h1>
-        <p>Đường dẫn bài tập bị sai hoặc bài này chưa có trong file dữ liệu.</p>
+function renderNotFound() {
+  viewRoot.innerHTML = `
+    <div class="empty">
+      <h2>Không tìm thấy bài tập</h2>
+      <p>Có thể đường link sai hoặc id bài tập chưa có trong file data.js.</p>
+      <div class="action-row">
+        <a href="index.html">← Quay về trang chính</a>
       </div>
-    `;
-    return;
-  }
+    </div>
+  `;
+}
+
+function renderProblem(problem) {
+  const topic = getTopic(problem.topic);
+  const subtopic = getSubtopic(problem.topic, problem.subtopic);
 
   document.title = problem.title;
 
-  root.innerHTML = `
-    <section class="problem-head">
-      <div class="badges">
-        <span class="badge">${topicName(problem.topic)}</span>
-        <span class="badge">${subtopicName(problem.topic, problem.subtopic)}</span>
-        <span class="badge">${problem.level}</span>
-        ${problem.tags.map(tag => `<span class="badge">${tag}</span>`).join("")}
-      </div>
-
+  viewRoot.innerHTML = `
+    <section class="chat-title">
       <h1>${problem.title}</h1>
       <p>${problem.summary}</p>
 
-      <div class="tools">
-        <button class="tool-btn" onclick="window.print()">In bài này</button>
-        <button class="tool-btn" onclick="copyCurrentLink()">Sao chép link</button>
+      <div class="chat-meta">
+        <span class="badge">${topic ? topic.title : "Không rõ chuyên đề"}</span>
+        <span class="badge">${subtopic ? subtopic.title : "Không rõ dạng bài"}</span>
+        <span class="badge level ${getLevelClass(problem.level)}">${problem.level}</span>
+        ${problem.tags.map(tag => `<span class="badge">${tag}</span>`).join("")}
       </div>
     </section>
 
-    <section class="chat-block">
-      <div class="avatar user">?</div>
-      <div class="message problem">
-        <h2>Đề bài</h2>
-        <div>${problem.statement}</div>
+    <div class="chat">
+      <div class="message user-msg">
+        <div class="avatar user">T</div>
+        <div class="bubble">
+          <h2>Đề bài</h2>
+          ${mathBlock(problem.statement)}
+        </div>
       </div>
-    </section>
 
-    <section class="chat-block">
-      <div class="avatar">G</div>
-      <div class="message solution">
-        <h2>Gợi ý</h2>
-        <div>${problem.hint}</div>
+      <div class="message bot-msg">
+        <div class="avatar bot">AI</div>
+        <div class="bubble">
+          <h2>Gợi ý</h2>
+          ${mathBlock(problem.hint)}
+        </div>
       </div>
-    </section>
 
-    <section class="chat-block">
-      <div class="avatar">✓</div>
-      <div class="message solution">
-        <h2>Lời giải</h2>
-        <div>${problem.solution}</div>
+      <div class="message bot-msg">
+        <div class="avatar bot">AI</div>
+        <div class="bubble">
+          <h2>Lời giải</h2>
+          ${mathBlock(problem.solution)}
+        </div>
       </div>
-    </section>
+    </div>
+
+    <div class="action-row">
+      <a href="index.html">← Về danh sách bài tập</a>
+    </div>
   `;
 
   typesetMath();
 }
 
-function copyCurrentLink() {
-  navigator.clipboard.writeText(window.location.href);
-  alert("Đã sao chép link bài tập!");
-}
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
 
-document.addEventListener("DOMContentLoaded", renderProblem);
+  const id = getParam("id");
+  const problem = PROBLEMS.find(item => item.id === id);
+
+  if (!problem) {
+    renderNotFound();
+    return;
+  }
+
+  renderProblem(problem);
+});
