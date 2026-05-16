@@ -1,311 +1,288 @@
-const $ = (selector) => document.querySelector(selector);
+const topicTree = document.getElementById("topicTree");
+const topicCards = document.getElementById("topicCards");
+const problemList = document.getElementById("problemList");
+const problemCount = document.getElementById("problemCount");
 
-const state = {
-  topic: "all",
-  subtopic: "all",
-  level: "all",
-  keyword: ""
+const searchInput = document.getElementById("searchInput");
+const topicFilter = document.getElementById("topicFilter");
+const subtopicFilter = document.getElementById("subtopicFilter");
+const levelFilter = document.getElementById("levelFilter");
+const clearBtn = document.getElementById("clearBtn");
+const themeBtn = document.getElementById("themeBtn");
+
+let state = {
+  search: "",
+  topic: "",
+  subtopic: "",
+  level: ""
 };
 
-function topicName(topicId) {
-  const topic = TOPICS.find(item => item.id === topicId);
-  return topic ? topic.name : "Không rõ";
+function initTheme() {
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+    themeBtn.textContent = "☀️";
+  }
+
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    themeBtn.textContent = isDark ? "☀️" : "🌙";
+  });
 }
 
-function subtopicName(topicId, subtopicId) {
-  const topic = TOPICS.find(item => item.id === topicId);
-  if (!topic) return "Không rõ";
-
-  const subtopic = topic.subtopics.find(item => item.id === subtopicId);
-  return subtopic ? subtopic.name : "Không rõ";
+function getTopic(topicId) {
+  return TOPICS.find(topic => topic.id === topicId);
 }
 
-function levelClass(level) {
+function getSubtopic(topicId, subtopicId) {
+  const topic = getTopic(topicId);
+  if (!topic) return null;
+
+  return topic.subtopics.find(subtopic => subtopic.id === subtopicId);
+}
+
+function getLevelClass(level) {
   if (level === "Dễ") return "easy";
   if (level === "Trung bình") return "medium";
   if (level === "Khó") return "hard";
-  if (level === "HSG") return "hsg";
   return "";
 }
 
-function typesetMath() {
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise();
-  }
-}
-
-function renderStats() {
-  const totalSubtopics = TOPICS.reduce((sum, topic) => sum + topic.subtopics.length, 0);
-
-  $("#statTopic").textContent = TOPICS.length;
-  $("#statSubtopic").textContent = totalSubtopics;
-  $("#statProblem").textContent = PROBLEMS.length;
-}
-
-function renderTopicCards() {
-  const box = $("#topicCards");
-
-  box.innerHTML = TOPICS.map(topic => `
-    <article class="topic-card ${topic.id}" data-topic="${topic.id}">
-      <h3>${topic.name}</h3>
-      <p>${topic.desc}</p>
-      <ul>
-        ${topic.subtopics.map(sub => `<li>${sub.name}</li>`).join("")}
-      </ul>
-    </article>
-  `).join("");
-
-  box.querySelectorAll(".topic-card").forEach(card => {
-    card.addEventListener("click", () => {
-      state.topic = card.dataset.topic;
-      state.subtopic = "all";
-      state.level = "all";
-      state.keyword = "";
-
-      syncControls();
-      renderProblems();
-
-      location.hash = "problems";
-    });
-  });
-}
-
-function renderTopicTree() {
-  const box = $("#topicTree");
-
-  box.innerHTML = TOPICS.map(topic => `
-    <div class="tree-topic">
-      <button data-topic="${topic.id}">${topic.name}</button>
-      <ul>
-        ${topic.subtopics.map(sub => `
-          <li data-topic="${topic.id}" data-subtopic="${sub.id}">
-            ${sub.name}
-          </li>
-        `).join("")}
-      </ul>
-    </div>
-  `).join("");
-
-  box.querySelectorAll("button[data-topic]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.topic = button.dataset.topic;
-      state.subtopic = "all";
-      syncControls();
-      renderProblems();
-    });
-  });
-
-  box.querySelectorAll("li[data-subtopic]").forEach(item => {
-    item.addEventListener("click", () => {
-      state.topic = item.dataset.topic;
-      state.subtopic = `${item.dataset.topic}::${item.dataset.subtopic}`;
-      syncControls();
-      renderProblems();
-    });
-  });
-}
-
 function renderTopicFilter() {
-  const select = $("#topicFilter");
-
-  select.innerHTML = `
-    <option value="all">Tất cả chuyên đề</option>
-    ${TOPICS.map(topic => `<option value="${topic.id}">${topic.name}</option>`).join("")}
-  `;
+  TOPICS.forEach(topic => {
+    const option = document.createElement("option");
+    option.value = topic.id;
+    option.textContent = topic.title;
+    topicFilter.appendChild(option);
+  });
 }
 
 function renderSubtopicFilter() {
-  const select = $("#subtopicFilter");
+  subtopicFilter.innerHTML = `<option value="">Tất cả dạng bài</option>`;
 
-  let topicsToShow = TOPICS;
+  let subtopics = [];
 
-  if (state.topic !== "all") {
-    topicsToShow = TOPICS.filter(topic => topic.id === state.topic);
+  if (state.topic) {
+    const topic = getTopic(state.topic);
+    subtopics = topic ? topic.subtopics : [];
+  } else {
+    subtopics = TOPICS.flatMap(topic => topic.subtopics);
   }
 
-  const options = topicsToShow.flatMap(topic => {
-    return topic.subtopics.map(sub => {
-      const value = `${topic.id}::${sub.id}`;
-      const label = state.topic === "all" ? `${topic.name} - ${sub.name}` : sub.name;
-      return `<option value="${value}">${label}</option>`;
-    });
+  subtopics.forEach(subtopic => {
+    const option = document.createElement("option");
+    option.value = subtopic.id;
+    option.textContent = subtopic.title;
+    subtopicFilter.appendChild(option);
   });
 
-  select.innerHTML = `
-    <option value="all">Tất cả dạng bài</option>
-    ${options.join("")}
-  `;
+  subtopicFilter.value = state.subtopic;
 }
 
-function syncControls() {
-  $("#searchInput").value = state.keyword;
-  $("#topicFilter").value = state.topic;
-  $("#levelFilter").value = state.level;
+function renderTopicTree() {
+  topicTree.innerHTML = "";
 
-  renderSubtopicFilter();
+  TOPICS.forEach(topic => {
+    const box = document.createElement("div");
+    box.className = "tree-topic";
 
-  $("#subtopicFilter").value = state.subtopic;
+    const titleBtn = document.createElement("button");
+    titleBtn.className = "tree-title";
+    titleBtn.textContent = topic.title;
+
+    if (state.topic === topic.id && !state.subtopic) {
+      titleBtn.classList.add("active");
+    }
+
+    titleBtn.addEventListener("click", () => {
+      state.topic = topic.id;
+      state.subtopic = "";
+      syncFilters();
+      renderAll();
+    });
+
+    const subBox = document.createElement("div");
+    subBox.className = "tree-sub";
+
+    topic.subtopics.forEach(subtopic => {
+      const subBtn = document.createElement("button");
+      subBtn.textContent = subtopic.title;
+
+      if (state.subtopic === subtopic.id) {
+        subBtn.classList.add("active");
+      }
+
+      subBtn.addEventListener("click", () => {
+        state.topic = topic.id;
+        state.subtopic = subtopic.id;
+        syncFilters();
+        renderAll();
+      });
+
+      subBox.appendChild(subBtn);
+    });
+
+    box.appendChild(titleBtn);
+    box.appendChild(subBox);
+    topicTree.appendChild(box);
+  });
 }
 
-function normalize(text) {
-  return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function renderTopicCards() {
+  topicCards.innerHTML = "";
+
+  TOPICS.forEach(topic => {
+    const card = document.createElement("article");
+    card.className = "topic-card";
+
+    card.innerHTML = `
+      <h3>${topic.title}</h3>
+      <ul>
+        ${topic.subtopics.map(subtopic => `<li>${subtopic.title}</li>`).join("")}
+      </ul>
+    `;
+
+    card.addEventListener("click", () => {
+      state.topic = topic.id;
+      state.subtopic = "";
+      syncFilters();
+      renderAll();
+      document.getElementById("problems").scrollIntoView();
+    });
+
+    topicCards.appendChild(card);
+  });
 }
 
 function getFilteredProblems() {
-  const keyword = normalize(state.keyword.trim());
+  const keyword = state.search.trim().toLowerCase();
 
   return PROBLEMS.filter(problem => {
-    const text = normalize([
+    const topic = getTopic(problem.topic);
+    const subtopic = getSubtopic(problem.topic, problem.subtopic);
+
+    const text = [
       problem.title,
       problem.summary,
-      topicName(problem.topic),
-      subtopicName(problem.topic, problem.subtopic),
       problem.level,
+      topic ? topic.title : "",
+      subtopic ? subtopic.title : "",
       problem.tags.join(" ")
-    ].join(" "));
+    ].join(" ").toLowerCase();
 
-    const matchKeyword = keyword === "" || text.includes(keyword);
-    const matchTopic = state.topic === "all" || problem.topic === state.topic;
-    const matchSubtopic = state.subtopic === "all" || state.subtopic === `${problem.topic}::${problem.subtopic}`;
-    const matchLevel = state.level === "all" || problem.level === state.level;
+    const matchSearch = !keyword || text.includes(keyword);
+    const matchTopic = !state.topic || problem.topic === state.topic;
+    const matchSubtopic = !state.subtopic || problem.subtopic === state.subtopic;
+    const matchLevel = !state.level || problem.level === state.level;
 
-    return matchKeyword && matchTopic && matchSubtopic && matchLevel;
+    return matchSearch && matchTopic && matchSubtopic && matchLevel;
   });
 }
 
 function renderProblems() {
-  const list = $("#problemList");
-  const resultCount = $("#resultCount");
   const problems = getFilteredProblems();
 
-  resultCount.textContent = `Tìm thấy ${problems.length} bài tập.`;
+  problemCount.textContent = `Tìm thấy ${problems.length} bài tập.`;
+  problemList.innerHTML = "";
 
   if (problems.length === 0) {
-    list.innerHTML = `<div class="empty">Không tìm thấy bài tập phù hợp.</div>`;
+    problemList.innerHTML = `
+      <div class="empty">
+        Không tìm thấy bài tập phù hợp.
+      </div>
+    `;
     return;
   }
 
-  list.innerHTML = problems.map(problem => `
-    <article class="problem-card" data-id="${problem.id}">
-      <div class="badges">
-        <span class="badge">${topicName(problem.topic)}</span>
-        <span class="badge ${levelClass(problem.level)}">${problem.level}</span>
+  problems.forEach(problem => {
+    const topic = getTopic(problem.topic);
+    const subtopic = getSubtopic(problem.topic, problem.subtopic);
+
+    const card = document.createElement("article");
+    card.className = "problem-card";
+    card.dataset.id = problem.id;
+
+    card.innerHTML = `
+      <div class="problem-top">
+        <h3>${problem.title}</h3>
+        <span class="badge level ${getLevelClass(problem.level)}">${problem.level}</span>
       </div>
 
-      <h3>${problem.title}</h3>
       <p>${problem.summary}</p>
 
       <div class="badges">
-        <span class="badge">${subtopicName(problem.topic, problem.subtopic)}</span>
+        <span class="badge">${topic ? topic.title : "Không rõ"}</span>
+        <span class="badge">${subtopic ? subtopic.title : "Không rõ"}</span>
         ${problem.tags.map(tag => `<span class="badge">${tag}</span>`).join("")}
       </div>
-    </article>
-  `).join("");
+    `;
 
-  list.querySelectorAll(".problem-card").forEach(card => {
     card.addEventListener("click", () => {
-      openProblem(card.dataset.id);
+      window.location.href = `view.html?id=${card.dataset.id}`;
     });
+
+    problemList.appendChild(card);
   });
 }
 
-function openProblem(id) {
-  const problem = PROBLEMS.find(item => item.id === id);
-
-  if (!problem) return;
-
-  $("#problemDetail").innerHTML = `
-    <div class="badges">
-      <span class="badge">${topicName(problem.topic)}</span>
-      <span class="badge">${subtopicName(problem.topic, problem.subtopic)}</span>
-      <span class="badge ${levelClass(problem.level)}">${problem.level}</span>
-      ${problem.tags.map(tag => `<span class="badge">${tag}</span>`).join("")}
-    </div>
-
-    <h2 class="detail-title">${problem.title}</h2>
-    <p class="detail-summary">${problem.summary}</p>
-
-    <section class="detail-section">
-      <h3>Đề bài</h3>
-      <div class="math-content">${problem.statement}</div>
-    </section>
-
-    <section class="detail-section">
-      <h3>Gợi ý</h3>
-      <div class="math-content">${problem.hint}</div>
-    </section>
-
-    <section class="detail-section">
-      <h3>Lời giải</h3>
-      <div class="math-content">${problem.solution}</div>
-    </section>
-  `;
-
-  $("#detailOverlay").classList.add("active");
-  document.body.style.overflow = "hidden";
-  typesetMath();
-}
-
-function closeProblem() {
-  $("#detailOverlay").classList.remove("active");
-  document.body.style.overflow = "";
+function syncFilters() {
+  searchInput.value = state.search;
+  topicFilter.value = state.topic;
+  levelFilter.value = state.level;
+  renderSubtopicFilter();
+  subtopicFilter.value = state.subtopic;
 }
 
 function bindEvents() {
-  $("#searchInput").addEventListener("input", event => {
-    state.keyword = event.target.value;
-    renderProblems();
+  searchInput.addEventListener("input", event => {
+    state.search = event.target.value;
+    renderAll();
   });
 
-  $("#topicFilter").addEventListener("change", event => {
+  topicFilter.addEventListener("change", event => {
     state.topic = event.target.value;
-    state.subtopic = "all";
+    state.subtopic = "";
     renderSubtopicFilter();
-    renderProblems();
+    renderAll();
   });
 
-  $("#subtopicFilter").addEventListener("change", event => {
+  subtopicFilter.addEventListener("change", event => {
     state.subtopic = event.target.value;
-    renderProblems();
+    renderAll();
   });
 
-  $("#levelFilter").addEventListener("change", event => {
+  levelFilter.addEventListener("change", event => {
     state.level = event.target.value;
-    renderProblems();
+    renderAll();
   });
 
-  $("#resetBtn").addEventListener("click", () => {
-    state.topic = "all";
-    state.subtopic = "all";
-    state.level = "all";
-    state.keyword = "";
-    syncControls();
-    renderProblems();
-  });
+  clearBtn.addEventListener("click", () => {
+    state = {
+      search: "",
+      topic: "",
+      subtopic: "",
+      level: ""
+    };
 
-  $("#closeDetail").addEventListener("click", closeProblem);
-
-  $("#detailOverlay").addEventListener("click", event => {
-    if (event.target.id === "detailOverlay") {
-      closeProblem();
-    }
-  });
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      closeProblem();
-    }
+    syncFilters();
+    renderAll();
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderStats();
-  renderTopicCards();
+function renderAll() {
   renderTopicTree();
+  renderTopicCards();
+  renderProblems();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
   renderTopicFilter();
   renderSubtopicFilter();
-  syncControls();
-  renderProblems();
   bindEvents();
-  typesetMath();
+  renderAll();
 });
