@@ -1,129 +1,69 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Tạo đề thi Toán 11 HK2</title>
-
-  <!-- File giao diện -->
   <link rel="stylesheet" href="assets/css/style.css" />
 
-  <!-- Cấu hình MathJax để hiển thị công thức Toán -->
   <script>
     window.MathJax = {
       tex: {
         inlineMath: [["\\(", "\\)"], ["$", "$"]],
         displayMath: [["\\[", "\\]"]]
       },
-      svg: {
-        fontCache: "global"
-      }
+      svg: { fontCache: "global" }
     };
   </script>
-
-  <!-- Thư viện MathJax -->
   <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <body>
-  <!-- Thanh tiêu đề -->
   <header class="topbar">
-    <div class="brand">
-      <div class="logo">11</div>
-
-      <div>
-        <h1>Tạo đề thi Toán 11 HK2</h1>
-        <p>Chọn số câu theo dạng và chuyên đề, sau đó xuất đề ra PDF.</p>
-      </div>
+    <div>
+      <h1>Tạo đề thi Toán 11 HK2</h1>
+      <p>Chọn số câu theo từng chuyên đề</p>
     </div>
-
-    <div class="top-actions">
-      <button class="btn btn-ghost" id="resetBtn" type="button">Đặt lại</button>
-      <button class="btn btn-primary" id="createBtn" type="button">Tạo đề</button>
-    </div>
+    <button id="themeBtn" class="ghost-btn">🌙</button>
   </header>
 
-  <!-- Nội dung chính -->
-  <main class="layout">
-
-    <!-- Thiết lập đề -->
-    <section class="panel">
-      <h2>Thiết lập đề</h2>
-
-      <div class="settings-grid">
-        <label class="field">
-          <span>Tên đề</span>
-          <input
-            id="examTitle"
-            type="text"
-            value="ĐỀ KIỂM TRA TOÁN 11 - HỌC KỲ 2"
-          />
+  <main class="container">
+    <section class="card">
+      <div class="grid-2">
+        <label>
+          Tên đề
+          <input id="examTitle" type="text" value="Đề kiểm tra Toán 11 học kỳ 2" />
         </label>
 
-        <label class="field">
-          <span>Mã đề</span>
+        <label>
+          Mã đề
           <input id="examCode" type="text" value="101" />
         </label>
+      </div>
 
-        <label class="checkline">
+      <div class="option-row">
+        <label class="check">
           <input id="shuffleQuestions" type="checkbox" checked />
-          <span>Trộn thứ tự câu hỏi</span>
+          Trộn câu hỏi
         </label>
 
-        <label class="checkline">
-          <input id="showAnswer" type="checkbox" />
-          <span>Xuất kèm đáp án và lời giải</span>
+        <label class="check">
+          <input id="showSolution" type="checkbox" />
+          Xuất kèm đáp án và lời giải
         </label>
       </div>
     </section>
 
-    <!-- Phần I: Trắc nghiệm -->
-    <section class="panel">
-      <div class="section-title">
-        <h2>PHẦN I. Trắc nghiệm</h2>
-        <span id="tnTotal" class="badge">0 câu</span>
-      </div>
+    <section id="builder"></section>
 
-      <div class="topic-grid" id="tracNghiemBox"></div>
-    </section>
-
-    <!-- Phần II: Đúng sai -->
-    <section class="panel">
-      <div class="section-title">
-        <h2>PHẦN II. Đúng / Sai</h2>
-        <span id="dsTotal" class="badge">0 câu</span>
-      </div>
-
-      <div class="topic-grid" id="dungSaiBox"></div>
-    </section>
-
-    <!-- Phần III: Trả lời ngắn -->
-    <section class="panel">
-      <div class="section-title">
-        <h2>PHẦN III. Trả lời ngắn</h2>
-        <span id="tlnTotal" class="badge">0 câu</span>
-      </div>
-
-      <div class="topic-grid" id="traLoiNganBox"></div>
-    </section>
-
-    <!-- Ghi chú -->
-    <section class="panel muted-panel">
-      <h2>Ghi chú</h2>
-
-      <p>
-        Muốn thêm câu hỏi, mở file <b>assets/js/data.js</b> rồi thêm object mới
-        vào mảng <b>QUESTIONS</b>. Web này chạy trực tiếp bằng GitHub Pages,
-        không cần server.
-      </p>
+    <section class="action-bar">
+      <button id="resetBtn" class="ghost-btn">Đặt lại</button>
+      <button id="createBtn" class="main-btn">Tạo đề</button>
     </section>
   </main>
 
-  <!-- File dữ liệu câu hỏi: phải đặt trước app.js -->
   <script src="assets/js/data.js"></script>
-
-  <!-- File xử lý trang index -->
   <script src="assets/js/app.js"></script>
 </body>
 </html>
