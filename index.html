@@ -1,121 +1,120 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trang web đầu tiên</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài tập Toán 11</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+  <link rel="stylesheet" href="assets/css/style.css" />
 
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f172a, #2563eb);
-      color: white;
-    }
-
-    header {
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    header h1 {
-      font-size: 28px;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    main {
-      padding: 80px 20px;
-      text-align: center;
-    }
-
-    .card {
-      max-width: 700px;
-      margin: auto;
-      padding: 40px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    .card h2 {
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
-
-    .card p {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    button {
-      padding: 12px 22px;
-      border: none;
-      border-radius: 999px;
-      background: white;
-      color: #2563eb;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      transform: scale(1.05);
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      opacity: 0.8;
-    }
-  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 
 <body>
-  <header>
-    <h1>Math Hub</h1>
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span class="logo">11</span>
+      <span>Bài tập Toán 11</span>
+    </a>
 
-    <nav>
-      <a href="#">Trang chủ</a>
-      <a href="#">Bài tập</a>
-      <a href="#">Liên hệ</a>
+    <nav class="nav">
+      <a href="index.html">Trang chủ</a>
+      <a href="problems.html">Kho bài tập</a>
+      <a href="#about">Giới thiệu</a>
     </nav>
   </header>
 
   <main>
-    <div class="card">
-      <h2>Xin chào!</h2>
-      <p>
-        Đây là trang web đầu tiên của tôi được chạy bằng GitHub Pages.
-        Bạn có thể chỉnh sửa nội dung này thành trang bài tập, tài liệu học tập hoặc Math Hub.
-      </p>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="tag">Tổng hợp bài tập lớp 11</p>
+        <h1>Kho bài tập Toán 11 có phân loại, tìm kiếm và lời giải.</h1>
+        <p class="desc">
+          Trang web này dùng để lưu trữ bài tập theo chuyên đề: Đại số - Giải tích,
+          Hình học, Tổ hợp - Xác suất và Đề tổng hợp.
+        </p>
 
-      <button onclick="alert('Trang web đã chạy thành công!')">
-        Bấm thử
-      </button>
-    </div>
+        <div class="hero-actions">
+          <a class="btn primary" href="problems.html">Vào kho bài tập</a>
+          <a class="btn ghost" href="#subjects">Xem chuyên đề</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h3>Bài mới nhất</h3>
+        <div id="latestProblems" class="latest-list"></div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <strong id="totalProblems">0</strong>
+        <span>Tổng số bài</span>
+      </div>
+      <div class="stat-card">
+        <strong>4</strong>
+        <span>Chuyên đề</span>
+      </div>
+      <div class="stat-card">
+        <strong>MathJax</strong>
+        <span>Hỗ trợ công thức</span>
+      </div>
+    </section>
+
+    <section id="subjects" class="section">
+      <div class="section-title">
+        <h2>Chuyên đề lớp 11</h2>
+        <p>Chọn một mảng kiến thức để luyện tập.</p>
+      </div>
+
+      <div class="subject-grid">
+        <a class="subject-card algebra" href="problems.html?category=algebra">
+          <h3>Đại số - Giải tích</h3>
+          <p>Dãy số, giới hạn, đạo hàm, lượng giác, phương trình.</p>
+        </a>
+
+        <a class="subject-card geo" href="problems.html?category=geometry">
+          <h3>Hình học</h3>
+          <p>Quan hệ song song, vuông góc, góc, khoảng cách trong không gian.</p>
+        </a>
+
+        <a class="subject-card combi" href="problems.html?category=combinatorics">
+          <h3>Tổ hợp - Xác suất</h3>
+          <p>Quy tắc đếm, chỉnh hợp, tổ hợp, nhị thức Newton, xác suất.</p>
+        </a>
+
+        <a class="subject-card exam" href="problems.html?category=exam">
+          <h3>Đề tổng hợp</h3>
+          <p>Các đề ôn tập, đề kiểm tra, đề nâng cao và đề HSG.</p>
+        </a>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <h2>Giới thiệu</h2>
+      <p>
+        Đây là website tĩnh chạy bằng GitHub Pages. Bạn chỉ cần thêm bài mới trong file
+        <code>assets/js/data.js</code>, web sẽ tự hiển thị ở trang kho bài tập.
+      </p>
+    </section>
   </main>
 
-  <footer>
-    © 2026 - Trang web của tôi
+  <footer class="footer">
+    © 2026 - Bài tập Toán 11
   </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
