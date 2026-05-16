@@ -1,399 +1,377 @@
-window.TOPICS = [
-  {
-    id: "mu-logarit",
-    title: "Mũ và Logarit",
-    subtopics: [
-      { id: "tinh-toan-co-ban", title: "Tính toán cơ bản" },
-      { id: "rut-gon-bieu-thuc", title: "Rút gọn biểu thức" },
-      { id: "phuong-trinh-mu", title: "Phương trình mũ" },
-      { id: "phuong-trinh-logarit", title: "Phương trình logarit" },
-      { id: "bai-toan-thuc-te", title: "Bài toán thực tế" }
-    ]
-  },
-  {
-    id: "dao-ham",
-    title: "Đạo hàm",
-    subtopics: [
-      { id: "tinh-dao-ham", title: "Tính đạo hàm" },
-      { id: "dao-ham-ham-hop", title: "Đạo hàm hàm hợp" },
-      { id: "dao-ham-luong-giac", title: "Đạo hàm lượng giác" },
-      { id: "tiep-tuyen", title: "Tiếp tuyến" },
-      { id: "ung-dung-thuc-te", title: "Ứng dụng thực tế" }
-    ]
-  },
-  {
-    id: "hinh-khong-gian-vuong-goc",
-    title: "Hình học không gian vuông góc",
-    subtopics: [
-      { id: "chung-minh-vuong-goc", title: "Chứng minh vuông góc" },
-      { id: "goc-trong-khong-gian", title: "Góc trong không gian" },
-      { id: "khoang-cach", title: "Khoảng cách" },
-      { id: "the-tich", title: "Thể tích" }
-    ]
-  },
-  {
-    id: "xac-suat",
-    title: "Xác suất",
-    subtopics: [
-      { id: "dem-khong-gian-mau", title: "Đếm không gian mẫu" },
-      { id: "xac-suat-co-ban", title: "Xác suất cơ bản" },
-      { id: "bien-co-doi", title: "Biến cố đối" },
-      { id: "xac-suat-co-dieu-kien", title: "Xác suất có điều kiện" }
-    ]
-  }
+// Ngân hàng câu hỏi Toán 11 HK2.
+// Muốn thêm câu mới: copy một object có sẵn, đổi id, type, topic, question, answer, solution.
+const TOPICS = [
+{ id: "xac-suat", name: "Xác suất" },
+{ id: "hinh-hoc-khong-gian", name: "Hình học không gian" },
+{ id: "dao-ham", name: "Đạo hàm" },
+{ id: "mu-logarit", name: "Mũ và logarit" }
 ];
-
-window.PROBLEMS = [
-  {
-    id: "ml-01",
-    topic: "mu-logarit",
-    subtopic: "phuong-trinh-mu",
-    level: "Dễ",
-    title: "Giải phương trình mũ cơ bản",
-    summary: "Đưa hai vế về cùng cơ số.",
-    tags: ["Phương trình mũ", "Cùng cơ số"],
-    statement: String.raw`
-Giải phương trình:
-\[
-2^{x+1}=16.
-\]
-`,
-    hint: String.raw`
-Ta đưa \(16\) về lũy thừa cơ số \(2\):
-\[
-16=2^4.
-\]
-`,
-    solution: String.raw`
-Ta có:
-\[
-2^{x+1}=16=2^4.
-\]
-Vì hai vế có cùng cơ số \(2>0, 2\ne 1\), nên:
-\[
-x+1=4.
-\]
-Do đó:
-\[
-x=3.
-\]
-Vậy nghiệm của phương trình là:
-\[
-\boxed{x=3}.
-\]
-`
-  },
-  {
-    id: "ml-02",
-    topic: "mu-logarit",
-    subtopic: "phuong-trinh-logarit",
-    level: "Trung bình",
-    title: "Giải phương trình logarit",
-    summary: "Dùng điều kiện xác định và định nghĩa logarit.",
-    tags: ["Logarit", "Điều kiện xác định"],
-    statement: String.raw`
-Giải phương trình:
-\[
-\log_2(x-1)=3.
-\]
-`,
-    hint: String.raw`
-Điều kiện: \(x-1>0\). Sau đó dùng định nghĩa:
-\[
-\log_a b=c \Leftrightarrow b=a^c.
-\]
-`,
-    solution: String.raw`
-Điều kiện xác định:
-\[
-x-1>0 \Leftrightarrow x>1.
-\]
-Ta có:
-\[
-\log_2(x-1)=3 \Leftrightarrow x-1=2^3.
-\]
-Suy ra:
-\[
-x-1=8 \Leftrightarrow x=9.
-\]
-Giá trị \(x=9\) thỏa mãn điều kiện \(x>1\).
-
-Vậy nghiệm là:
-\[
-\boxed{x=9}.
-\]
-`
-  },
-  {
-    id: "dh-01",
-    topic: "dao-ham",
-    subtopic: "tinh-dao-ham",
-    level: "Dễ",
-    title: "Tính đạo hàm đa thức",
-    summary: "Áp dụng công thức đạo hàm của lũy thừa.",
-    tags: ["Đạo hàm", "Đa thức"],
-    statement: String.raw`
-Tính đạo hàm của hàm số:
-\[
-y=3x^4-2x^2+5x-7.
-\]
-`,
-    hint: String.raw`
-Dùng công thức:
-\[
-(x^n)'=nx^{n-1}.
-\]
-`,
-    solution: String.raw`
-Ta có:
-\[
-(3x^4)'=12x^3,
-\]
-\[
-(-2x^2)'=-4x,
-\]
-\[
-(5x)'=5,
-\]
-và hằng số \(-7\) có đạo hàm bằng \(0\).
-
-Vậy:
-\[
-y'=12x^3-4x+5.
-\]
-`
-  },
-  {
-    id: "dh-02",
-    topic: "dao-ham",
-    subtopic: "dao-ham-ham-hop",
-    level: "Trung bình",
-    title: "Đạo hàm hàm hợp",
-    summary: "Dùng công thức đạo hàm của hàm hợp.",
-    tags: ["Hàm hợp", "Đạo hàm"],
-    statement: String.raw`
-Tính đạo hàm của hàm số:
-\[
-y=(2x^2-3x+1)^5.
-\]
-`,
-    hint: String.raw`
-Đặt phần bên trong là \(u=2x^2-3x+1\), rồi dùng:
-\[
-(u^5)'=5u^4u'.
-\]
-`,
-    solution: String.raw`
-Ta có:
-\[
-y=(2x^2-3x+1)^5.
-\]
-Theo công thức đạo hàm hàm hợp:
-\[
-y'=5(2x^2-3x+1)^4(2x^2-3x+1)'.
-\]
-Mà:
-\[
-(2x^2-3x+1)'=4x-3.
-\]
-Do đó:
-\[
-\boxed{y'=5(2x^2-3x+1)^4(4x-3)}.
-\]
-`
-  },
-  {
-    id: "dh-03",
-    topic: "dao-ham",
-    subtopic: "tiep-tuyen",
-    level: "Trung bình",
-    title: "Viết phương trình tiếp tuyến",
-    summary: "Tìm hệ số góc bằng đạo hàm tại điểm tiếp xúc.",
-    tags: ["Tiếp tuyến", "Đạo hàm"],
-    statement: String.raw`
-Cho hàm số:
-\[
-y=x^2-2x+3.
-\]
-Viết phương trình tiếp tuyến của đồ thị hàm số tại điểm có hoành độ \(x_0=2\).
-`,
-    hint: String.raw`
-Tiếp tuyến tại \(x_0\) có dạng:
-\[
-y=f'(x_0)(x-x_0)+f(x_0).
-\]
-`,
-    solution: String.raw`
-Ta có:
-\[
-f(x)=x^2-2x+3.
-\]
-Suy ra:
-\[
-f'(x)=2x-2.
-\]
-Tại \(x_0=2\):
-\[
-f'(2)=2\cdot 2-2=2.
-\]
-Lại có:
-\[
-f(2)=2^2-2\cdot 2+3=3.
-\]
-Vậy phương trình tiếp tuyến là:
-\[
-y=2(x-2)+3.
-\]
-Rút gọn:
-\[
-\boxed{y=2x-1}.
-\]
-`
-  },
-  {
-    id: "hh-01",
-    topic: "hinh-khong-gian-vuong-goc",
-    subtopic: "chung-minh-vuong-goc",
-    level: "Trung bình",
-    title: "Chứng minh đường thẳng vuông góc mặt phẳng",
-    summary: "Dùng tiêu chuẩn vuông góc với hai đường cắt nhau trong mặt phẳng.",
-    tags: ["Không gian", "Vuông góc"],
-    statement: String.raw`
-Cho hình chóp \(S.ABC\). Biết \(SA\perp AB\), \(SA\perp AC\), và \(AB\), \(AC\) cắt nhau tại \(A\). Chứng minh:
-\[
-SA\perp (ABC).
-\]
-`,
-    hint: String.raw`
-Một đường thẳng vuông góc với hai đường thẳng cắt nhau nằm trong một mặt phẳng thì vuông góc với mặt phẳng đó.
-`,
-    solution: String.raw`
-Ta có \(AB\subset (ABC)\), \(AC\subset (ABC)\), và \(AB\), \(AC\) cắt nhau tại \(A\).
-
-Theo giả thiết:
-\[
-SA\perp AB,\qquad SA\perp AC.
-\]
-Vì \(SA\) vuông góc với hai đường thẳng cắt nhau \(AB\), \(AC\) cùng nằm trong mặt phẳng \((ABC)\), nên:
-\[
-\boxed{SA\perp (ABC)}.
-\]
-`
-  },
-  {
-    id: "hh-02",
-    topic: "hinh-khong-gian-vuong-goc",
-    subtopic: "the-tich",
-    level: "Khó",
-    title: "Tính thể tích hình chóp",
-    summary: "Xác định chiều cao rồi áp dụng công thức thể tích.",
-    tags: ["Hình chóp", "Thể tích"],
-    statement: String.raw`
-Cho hình chóp \(S.ABC\) có \(SA\perp (ABC)\), tam giác \(ABC\) vuông tại \(A\), \(AB=3\), \(AC=4\), \(SA=5\). Tính thể tích khối chóp \(S.ABC\).
-`,
-    hint: String.raw`
-Dùng công thức:
-\[
-V=\frac13 S_{\text{đáy}}\cdot h.
-\]
-Ở đây \(h=SA\).
-`,
-    solution: String.raw`
-Vì tam giác \(ABC\) vuông tại \(A\), nên diện tích đáy là:
-\[
-S_{ABC}=\frac12\cdot AB\cdot AC=\frac12\cdot 3\cdot 4=6.
-\]
-Do \(SA\perp (ABC)\), nên chiều cao của hình chóp là:
-\[
-h=SA=5.
-\]
-Vậy thể tích khối chóp \(S.ABC\) là:
-\[
-V=\frac13\cdot S_{ABC}\cdot h
-=\frac13\cdot 6\cdot 5=10.
-\]
-Do đó:
-\[
-\boxed{V=10}.
-\]
-`
-  },
-  {
-    id: "xs-01",
-    topic: "xac-suat",
-    subtopic: "xac-suat-co-ban",
-    level: "Dễ",
-    title: "Xác suất gieo xúc xắc",
-    summary: "Tính số kết quả thuận lợi chia cho số kết quả có thể.",
-    tags: ["Xác suất", "Xúc xắc"],
-    statement: String.raw`
-Gieo một con xúc xắc cân đối một lần. Tính xác suất để xuất hiện mặt có số chấm chẵn.
-`,
-    hint: String.raw`
-Không gian mẫu có \(6\) kết quả. Các mặt chẵn là \(2,4,6\).
-`,
-    solution: String.raw`
-Không gian mẫu là:
-\[
-\Omega=\{1,2,3,4,5,6\}.
-\]
-Số phần tử của không gian mẫu là:
-\[
-|\Omega|=6.
-\]
-Biến cố xuất hiện mặt có số chấm chẵn là:
-\[
-A=\{2,4,6\}.
-\]
-Suy ra:
-\[
-|A|=3.
-\]
-Vậy xác suất cần tìm là:
-\[
-P(A)=\frac{|A|}{|\Omega|}=\frac36=\frac12.
-\]
-Do đó:
-\[
-\boxed{P(A)=\frac12}.
-\]
-`
-  },
-  {
-    id: "xs-02",
-    topic: "xac-suat",
-    subtopic: "bien-co-doi",
-    level: "Trung bình",
-    title: "Dùng biến cố đối",
-    summary: "Tính xác suất ít nhất một lần xuất hiện mặt ngửa.",
-    tags: ["Biến cố đối", "Đồng xu"],
-    statement: String.raw`
-Tung một đồng xu cân đối \(3\) lần. Tính xác suất để có ít nhất một lần xuất hiện mặt ngửa.
-`,
-    hint: String.raw`
-Dùng biến cố đối: không có lần nào xuất hiện mặt ngửa.
-`,
-    solution: String.raw`
-Mỗi lần tung có \(2\) khả năng, nên tổng số kết quả là:
-\[
-2^3=8.
-\]
-Gọi \(A\) là biến cố có ít nhất một lần xuất hiện mặt ngửa.
-
-Biến cố đối \(\overline A\) là không có lần nào xuất hiện mặt ngửa, tức cả \(3\) lần đều là mặt sấp.
-
-Khi đó:
-\[
-P(\overline A)=\frac18.
-\]
-Vậy:
-\[
-P(A)=1-P(\overline A)=1-\frac18=\frac78.
-\]
-Do đó:
-\[
-\boxed{P(A)=\frac78}.
-\]
-`
-  }
+const TYPE_NAMES = {
+"trac-nghiem": "Trắc nghiệm",
+"dung-sai": "Đúng / Sai",
+"tra-loi-ngan": "Trả lời ngắn"
+};
+const QUESTIONS = [
+// =========================
+// PHẦN I. TRẮC NGHIỆM
+// =========================
+{
+id: "tn-xs-01",
+type: "trac-nghiem",
+topic: "xac-suat",
+question: String.raw`Gieo một con xúc xắc cân đối một lần. Xác suất đểxuất hiện mặt có sốchấm chẵn bằng`,
+choices: [String.raw`\(\frac{1}{6}\)`, String.raw`\(\frac{1}{3}\)`, String.raw`\(\frac{1}{2}\)`,
+,→ String.raw`\(\frac{2}{3}\)`],
+answer: "C",
+solution: String.raw`Các mặt chẵn là \(2,4,6\), có \(3\) kết quả thuận lợi trên \(6\) kết quả có thể. Vậy xác
+,→ suất bằng \(\frac{3}{6}=\frac{1}{2}\).`
+},
+{
+id: "tn-xs-02",
+type: "trac-nghiem",
+topic: "xac-suat",
+question: String.raw`Một hộp có \(5\) viên bi đỏ và \(3\) viên bi xanh. Lấy ngẫu nhiên một viên bi. Xác suất lấy
+,→ được bi xanh là`,
+choices: [String.raw`\(\frac{3}{8}\)`, String.raw`\(\frac{5}{8}\)`, String.raw`\(\frac{1}{3}\)`,
+,→ String.raw`\(\frac{1}{8}\)`],
+answer: "A",
+solution: String.raw`Có \(3\) viên xanh trong tổng số\(8\) viên nên xác suất là \(\frac{3}{8}\).`
+},
+{
+id: "tn-xs-03",
+type: "trac-nghiem",
+topic: "xac-suat",
+question: String.raw`Từ các chữ số\(1,2,3,4\), lập ngẫu nhiên một sốcó hai chữ sốkhác nhau. Xác suất đểsố
+,→ lập được là sốchẵn bằng`,
+choices: [String.raw`\(\frac{1}{4}\)`, String.raw`\(\frac{1}{3}\)`, String.raw`\(\frac{1}{2}\)`,
+,→ String.raw`\(\frac{2}{3}\)`],
+answer: "C",
+solution: String.raw`Có \(4\cdot 3=12\) số. Sốchẵn có chữ sốhàng đơn vị là \(2\) hoặc \(4\), mỗi trường hợp có
+,→ \(3\) cách chọn hàng chục. Vậy có \(6\) sốthuận lợi, xác suất là \(\frac{6}{12}=\frac{1}{2}\).`
+},
+{
+id: "tn-xs-04",
+type: "trac-nghiem",
+topic: "xac-suat",
+question: String.raw`Một lớp có \(20\) học sinh nam và \(15\) học sinh nữ. Chọn ngẫu nhiên một học sinh. Xác
+,→ suất chọn được học sinh nữ bằng`,
+choices: [String.raw`\(\frac{3}{7}\)`, String.raw`\(\frac{4}{7}\)`, String.raw`\(\frac{1}{2}\)`,
+,→ String.raw`\(\frac{15}{20}\)`],
+answer: "A",
+solution: String.raw`Tổng sốhọc sinh là \(35\). Có \(15\) học sinh nữ nên xác suất là
+,→ \(\frac{15}{35}=\frac{3}{7}\).`
+},
+{
+id: "tn-hh-01",
+type: "trac-nghiem",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho đường thẳng \(a\) vuông góc với mặt phẳng \((P)\). Nếu \(b\) là đường thẳng nằm trong
+,→ \((P)\), khi đó`,
+choices: [String.raw`\(a\parallel b\)`, String.raw`\(a\perp b\)`, String.raw`\(a\) cắt \(b\)`, String.raw`\(a\)
+,→ trùng \(b\)`],
+answer: "B",
+solution: String.raw`Đường thẳng vuông góc với một mặt phẳng thì vuông góc với mọi đường thẳng nằm trong mặt
+,→ phẳng đó.`
+},
+{
+id: "tn-hh-02",
+type: "trac-nghiem",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho hình chóp \(S.ABC\) có \(SA\perp (ABC)\). Khi đó góc giữa \(SB\) và \((ABC)\) là`,
+choices: [String.raw`\(\widehat{SBA}\)`, String.raw`\(\widehat{SAB}\)`, String.raw`\(\widehat{SCA}\)`,
+,→ String.raw`\(\widehat{ABC}\)`],
+answer: "A",
+solution: String.raw`Hình chiếu của \(S\) trên \((ABC)\) là \(A\), nên hình chiếu của \(SB\) trên \((ABC)\) là
+,→ \(AB\). Do đó góc cần tìm là \(\widehat{SBA}\).`
+},
+{
+id: "tn-hh-03",
+type: "trac-nghiem",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho \(AB\perp (P)\) tại \(A\). Khoảng cách từ \(B\) đến mặt phẳng \((P)\) bằng`,
+choices: [String.raw`\(AB\)`, String.raw`\(AA\)`, String.raw`Khoảng cách từ \(A\) đến \(B\) nhân \(2\)`,
+,→ String.raw`Không xác định`],
+answer: "A",
+solution: String.raw`Vì \(AB\perp (P)\) và \(A\in (P)\), đoạn vuông góc từ \(B\) đến \((P)\) là \(BA\).`
+},
+{
+id: "tn-hh-04",
+type: "trac-nghiem",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Trong hình lập phương \(ABCD.A'B'C'D'\), đường thẳng \(AA'\) vuông góc với mặt phẳng nào
+,→ sau đây?`,
+choices: [String.raw`\((ABCD)\)`, String.raw`\((ABB'A')\)`, String.raw`\((ADD'A')\)`,
+,→ String.raw`\((A'B'C'D')\)`],
+answer: "A",
+solution: String.raw`Cạnh bên \(AA'\) của hình lập phương vuông góc với mặt đáy \((ABCD)\).`
+},
+{
+id: "tn-dh-01",
+type: "trac-nghiem",
+topic: "dao-ham",
+question: String.raw`Đạo hàm của hàm số\(y=x^3-2x+1\) là`,
+choices: [String.raw`\(y'=3x^2-2\)`, String.raw`\(y'=x^2-2\)`, String.raw`\(y'=3x^2+1\)`,
+,→ String.raw`\(y'=3x-2\)`],
+answer: "A",
+solution: String.raw`Ta có \((x^3)'=3x^2\), \((-2x)'=-2\), \(1'=0\). Vậy \(y'=3x^2-2\).`
+},
+{
+id: "tn-dh-02",
+type: "trac-nghiem",
+topic: "dao-ham",
+question: String.raw`Đạo hàm của hàm số\(y=\sin x\) là`,
+choices: [String.raw`\(\cos x\)`, String.raw`\(-\cos x\)`, String.raw`\(\tan x\)`, String.raw`\(-\sin x\)`],
+answer: "A",
+solution: String.raw`Theo công thức đạo hàm cơ bản, \((\sin x)'=\cos x\).`
+},
+{
+id: "tn-dh-03",
+type: "trac-nghiem",
+topic: "dao-ham",
+question: String.raw`Cho \(y=(2x+1)^5\). Khi đó \(y'\) bằng`,
+choices: [String.raw`\(5(2x+1)^4\)`, String.raw`\(10(2x+1)^4\)`, String.raw`\(2(2x+1)^4\)`,
+,→ String.raw`\(10(2x+1)^5\)`],
+answer: "B",
+solution: String.raw`Dùng đạo hàm hàm hợp: \(y'=5(2x+1)^4\cdot 2=10(2x+1)^4\).`
+},
+{
+id: "tn-dh-04",
+type: "trac-nghiem",
+topic: "dao-ham",
+question: String.raw`Hệ sốgóc tiếp tuyến của đồthị \(y=x^2\) tại điểm có hoành độ \(x_0=2\) là`,
+choices: [String.raw`\(2\)`, String.raw`\(3\)`, String.raw`\(4\)`, String.raw`\(5\)`],
+answer: "C",
+solution: String.raw`Ta có \(y'=2x\). Tại \(x_0=2\), hệ sốgóc là \(y'(2)=4\).`
+},
+{
+id: "tn-ml-01",
+type: "trac-nghiem",
+topic: "mu-logarit",
+question: String.raw`Với \(a>0, a\ne 1\), biểu thức \(\log_a a^3\) bằng`,
+choices: [String.raw`\(a^3\)`, String.raw`\(3\)`, String.raw`\(\frac{1}{3}\)`, String.raw`\(0\)`],
+answer: "B",
+solution: String.raw`Theo tính chất logarit, \(\log_a a^3=3\).`
+},
+{
+id: "tn-ml-02",
+type: "trac-nghiem",
+topic: "mu-logarit",
+question: String.raw`Nghiệm của phương trình \(2^x=8\) là`,
+choices: [String.raw`\(x=2\)`, String.raw`\(x=3\)`, String.raw`\(x=4\)`, String.raw`\(x=8\)`],
+answer: "B",
+solution: String.raw`Vì \(8=2^3\), nên \(2^x=2^3\Rightarrow x=3\).`
+},
+{
+id: "tn-ml-03",
+type: "trac-nghiem",
+topic: "mu-logarit",
+question: String.raw`Điều kiện xác định của biểu thức \(\log_2(x-1)\) là`,
+choices: [String.raw`\(x>1\)`, String.raw`\(x\ge 1\)`, String.raw`\(x<1\)`, String.raw`\(x\ne 1\)`],
+answer: "A",
+solution: String.raw`Điều kiện của logarit là \(x-1>0\Rightarrow x>1\).`
+},
+{
+id: "tn-ml-04",
+type: "trac-nghiem",
+topic: "mu-logarit",
+question: String.raw`Giá trị của \(\log_{10}1000\) là`,
+choices: [String.raw`\(1\)`, String.raw`\(2\)`, String.raw`\(3\)`, String.raw`\(10\)`],
+answer: "C",
+solution: String.raw`Vì \(1000=10^3\), nên \(\log_{10}1000=3\).`
+},
+// =========================
+// PHẦN II. ĐÚNG / SAI
+// =========================
+{
+id: "ds-xs-01",
+type: "dung-sai",
+topic: "xac-suat",
+question: String.raw`Gieo một con xúc xắc cân đối một lần. Xét các mệnh đềsau.`,
+statements: [
+String.raw`Không gian mẫu có \(6\) phần tử.`,
+String.raw`Biến cốxuất hiện sốchấm lẻ có \(2\) kết quả thuận lợi.`,
+String.raw`Xác suất xuất hiện sốchấm lớn hơn \(4\) là \(\frac{1}{3}\).`,
+String.raw`Xác suất xuất hiện sốchấm bằng \(7\) là \(\frac{1}{6}\).`
+],
+answer: ["Đ", "S", "Đ", "S"],
+solution: String.raw`Không gian mẫu là \(\{1,2,3,4,5,6\}\). Sốlẻ gồm \(1,3,5\), có \(3\) kết quả. Sốlớn hơn
+,→ \(4\) gồm \(5,6\), xác suất \(\frac{2}{6}=\frac{1}{3}\). Không thểxuất hiện mặt \(7\).`
+},
+{
+id: "ds-xs-02",
+type: "dung-sai",
+topic: "xac-suat",
+question: String.raw`Một hộp có \(4\) bi đỏ và \(6\) bi xanh. Lấy ngẫu nhiên một viên. Xét các mệnh đềsau.`,
+statements: [
+String.raw`Tổng sốkết quả có thểlà \(10\).`,
+String.raw`Xác suất lấy được bi đỏ là \(\frac{2}{5}\).`,
+String.raw`Xác suất lấy được bi xanh là \(\frac{3}{5}\).`,
+String.raw`Xác suất lấy được bi vàng là \(1\).`
+],
+answer: ["Đ", "Đ", "Đ", "S"],
+solution: String.raw`Tổng sốbi là \(10\). Xác suất lấy bi đỏ là \(\frac{4}{10}=\frac{2}{5}\). Xác suất lấy bi
+,→ xanh là \(\frac{6}{10}=\frac{3}{5}\). Trong hộp không có bi vàng.`
+},
+{
+id: "ds-hh-01",
+type: "dung-sai",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho \(SA\perp (ABC)\). Xét các mệnh đềsau.`,
+statements: [
+String.raw`\(SA\perp AB\).`,
+String.raw`\(SA\perp AC\).`,
+String.raw`\(SA\parallel BC\).`,
+String.raw`Hình chiếu của \(S\) trên \((ABC)\) là \(A\).`
+],
+answer: ["Đ", "Đ", "S", "Đ"],
+solution: String.raw`Vì \(SA\perp (ABC)\), nên \(SA\) vuông góc với mọi đường thẳng nằm trong \((ABC)\) đi qua
+,→ \(A\), đặc biệt là \(AB, AC\). Hình chiếu của \(S\) là \(A\).`
+},
+{
+id: "ds-hh-02",
+type: "dung-sai",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho hình lập phương \(ABCD.A'B'C'D'\). Xét các mệnh đềsau.`,
+statements: [
+String.raw`\(AA'\perp (ABCD)\).`,
+String.raw`\(AB\perp AD\).`,
+String.raw`\(AB\parallel C'D'\).`,
+String.raw`\(AC\perp (ABCD)\).`
+],
+answer: ["Đ", "Đ", "Đ", "S"],
+solution: String.raw`Trong hình lập phương, cạnh bên vuông góc với đáy, các cạnh kềtrong đáy vuông góc nhau, và
+\(AB\parallel CD\parallel C'D'\). Đường chéo \(AC\) nằm trong \((ABCD)\), không vuông góc với mặt phẳng
+này.`
+,→
+,→
+},
+{
+id: "ds-dh-01",
+type: "dung-sai",
+topic: "dao-ham",
+question: String.raw`Cho hàm số\(f(x)=x^3-3x+2\). Xét các mệnh đềsau.`,
+statements: [
+String.raw`\(f'(x)=3x^2-3\).`,
+String.raw`\(f'(1)=0\).`,
+String.raw`\(f'(0)=0\).`,
+String.raw`Hệ sốgóc tiếp tuyến tại \(x=2\) bằng \(9\).`
+],
+answer: ["Đ", "Đ", "S", "Đ"],
+solution: String.raw`Ta có \(f'(x)=3x^2-3\). Suy ra \(f'(1)=0\), \(f'(0)=-3\), \(f'(2)=9\).`
+},
+{
+id: "ds-dh-02",
+type: "dung-sai",
+topic: "dao-ham",
+question: String.raw`Cho \(y=\cos x\). Xét các mệnh đềsau.`,
+statements: [
+String.raw`\(y'=-\sin x\).`,
+String.raw`Tại \(x=0\), \(y'=0\).`,
+String.raw`Tại \(x=\frac{\pi}{2}\), \(y'=-1\).`,
+String.raw`Đạo hàm của \(\cos x\) là \(\sin x\).`
+],
+answer: ["Đ", "Đ", "Đ", "S"],
+solution: String.raw`Ta có \((\cos x)'=-\sin x\). Do đó tại \(x=0\), \(y'=0\); tại \(x=\frac{\pi}{2}\),
+,→ \(y'=-1\).`
+},
+{
+id: "ds-ml-01",
+type: "dung-sai",
+topic: "mu-logarit",
+question: String.raw`Với \(a>0, a\ne 1\), xét các mệnh đềsau.`,
+statements: [
+String.raw`\(\log_a 1=0\).`,
+String.raw`\(\log_a a=1\).`,
+String.raw`\(\log_a a^5=5\).`,
+String.raw`\(\log_a 0=0\).`
+],
+answer: ["Đ", "Đ", "Đ", "S"],
+solution: String.raw`Các tính chất đúng là \(\log_a1=0\), \(\log_a a=1\), \(\log_a a^5=5\). Biểu thức
+,→ \(\log_a0\) không xác định.`
+},
+{
+id: "ds-ml-02",
+type: "dung-sai",
+topic: "mu-logarit",
+question: String.raw`Xét phương trình \(3^x=27\) và biểu thức \(\log_2(x-2)\).`,
+statements: [
+String.raw`Phương trình \(3^x=27\) có nghiệm \(x=3\).`,
+String.raw`Điều kiện xác định của \(\log_2(x-2)\) là \(x>2\).`,
+String.raw`\(\log_2 8=4\).`,
+String.raw`Nếu \(2^x=16\) thì \(x=4\).`
+],
+answer: ["Đ", "Đ", "S", "Đ"],
+solution: String.raw`Vì \(27=3^3\), nên \(x=3\). Điều kiện \(x-2>0\Rightarrow x>2\). Ta có \(\log_2 8=3\), còn
+,→ \(16=2^4\).`
+},
+// =========================
+// PHẦN III. TRẢ LỜI NGẮN
+// =========================
+{
+id: "tln-xs-01",
+type: "tra-loi-ngan",
+topic: "xac-suat",
+question: String.raw`Gieo hai đồng xu cân đối. Tính xác suất đểcả hai đồng xu đều xuất hiện mặt sấp.`,
+answer: String.raw`\(\frac{1}{4}\)`,
+solution: String.raw`Không gian mẫu có \(4\) kết quả đồng khả năng. Chı̉ có \(1\) kết quả cả hai đều sấp, nên xác
+,→ suất bằng \(\frac{1}{4}\).`
+},
+{
+id: "tln-xs-02",
+type: "tra-loi-ngan",
+topic: "xac-suat",
+question: String.raw`Một hộp có \(7\) viên bi đỏ và \(5\) viên bi xanh. Lấy ngẫu nhiên một viên. Tính xác suất
+,→ lấy được bi đỏ.`,
+answer: String.raw`\(\frac{7}{12}\)`,
+solution: String.raw`Tổng sốviên bi là \(12\). Có \(7\) viên đỏ nên xác suất là \(\frac{7}{12}\).`
+},
+{
+id: "tln-hh-01",
+type: "tra-loi-ngan",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho hình chóp \(S.ABC\) có \(SA\perp (ABC)\), \(SA=3\), \(AB=4\). Tính độ dài \(SB\).`,
+answer: String.raw`\(5\)`,
+solution: String.raw`Vì \(SA\perp (ABC)\) nên \(SA\perp AB\). Tam giác \(SAB\) vuông tại \(A\), do đó
+,→ \(SB=\sqrt{SA^2+AB^2}=\sqrt{3^2+4^2}=5\).`
+},
+{
+id: "tln-hh-02",
+type: "tra-loi-ngan",
+topic: "hinh-hoc-khong-gian",
+question: String.raw`Cho \(AB\perp (P)\) tại \(A\) và \(AB=6\). Tính khoảng cách từ \(B\) đến \((P)\).`,
+answer: String.raw`\(6\)`,
+solution: String.raw`Vì \(AB\) là đoạn vuông góc từ \(B\) đến \((P)\), khoảng cách cần tìm bằng \(AB=6\).`
+},
+{
+id: "tln-dh-01",
+type: "tra-loi-ngan",
+topic: "dao-ham",
+question: String.raw`Tính đạo hàm của hàm số\(y=x^4-2x^2+3\) tại \(x=1\).`,
+answer: String.raw`\(0\)`,
+solution: String.raw`Ta có \(y'=4x^3-4x\). Suy ra \(y'(1)=4-4=0\).`
+},
+{
+id: "tln-dh-02",
+type: "tra-loi-ngan",
+topic: "dao-ham",
+question: String.raw`Cho \(y=3x^2+2x-1\). Tính hệ sốgóc tiếp tuyến của đồthị tại \(x=2\).`,
+answer: String.raw`\(14\)`,
+solution: String.raw`Ta có \(y'=6x+2\). Tại \(x=2\), hệ sốgóc là \(y'(2)=14\).`
+},
+{
+id: "tln-ml-01",
+type: "tra-loi-ngan",
+topic: "mu-logarit",
+question: String.raw`Giải phương trình \(5^x=125\).`,
+answer: String.raw`\(x=3\)`,
+solution: String.raw`Vì \(125=5^3\), nên \(5^x=5^3\Rightarrow x=3\).`
+},
+{
+id: "tln-ml-02",
+type: "tra-loi-ngan",
+topic: "mu-logarit",
+question: String.raw`Tính giá trị của \(\log_3 81\).`,
+answer: String.raw`\(4\)`,
+solution: String.raw`Vì \(81=3^4\), nên \(\log_3 81=4\).`
+}
 ];
