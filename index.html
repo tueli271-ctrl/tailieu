@@ -1,653 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resource Tower Defense</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at top, #1e293b, #020617 72%);
-      font-family: Arial, sans-serif;
-      color: white;
-      overflow: hidden;
-    }
-
-    .wrap {
-      width: min(96vw, 1120px);
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 8px;
-      font-size: 30px;
-      letter-spacing: 1px;
-    }
-
-    .topbar {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .pill {
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 999px;
-      padding: 8px 10px;
-      font-size: 14px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 8px 12px;
-      cursor: pointer;
-      background: linear-gradient(135deg, #22c55e, #38bdf8);
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 8px 20px rgba(34,197,94,0.22);
-    }
-
-    button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    canvas {
-      width: 100%;
-      max-width: 1120px;
-      height: auto;
-      border-radius: 22px;
-      border: 3px solid rgba(255,255,255,0.12);
-      box-shadow: 0 25px 70px rgba(0,0,0,0.48);
-      background: #0f172a;
-    }
-
-    .hint {
-      margin-top: 8px;
-      color: #cbd5e1;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .kbd {
-      display: inline-block;
-      padding: 2px 7px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.13);
-      color: #fff;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tạo đềthi Toán 11 HK2</title>
+<link rel="stylesheet" href="assets/css/style.css" />
+<script>
+window.MathJax = {
+tex: {
+inlineMath: [["\\(", "\\)"], ["$", "$"]],
+displayMath: [["\\[", "\\]"]]
+},
+svg: { fontCache: "global" }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Resource Tower Defense</h1>
-
-    <div class="topbar">
-      <div class="pill">Wood: <span id="wood">0</span></div>
-      <div class="pill">Stone: <span id="stone">0</span></div>
-      <div class="pill">Base HP: <span id="hp">20</span></div>
-      <div class="pill">Wave: <span id="wave">0</span></div>
-      <div class="pill">Enemies: <span id="alive">0</span></div>
-      <button id="waveBtn">Start Wave</button>
-    </div>
-
-    <canvas id="game" width="1120" height="640"></canvas>
-
-    <p class="hint">
-      Move: <span class="kbd">WASD</span> / <span class="kbd">Arrow Keys</span> · Gather nearby resource: <span class="kbd">E</span> · Build tower: click an empty grass tile<br />
-      Tower cost: 25 wood + 10 stone. Protect the blue base from enemies.
-    </p>
-  </div>
-
-  <script>
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
-
-    const woodEl = document.getElementById("wood");
-    const stoneEl = document.getElementById("stone");
-    const hpEl = document.getElementById("hp");
-    const waveEl = document.getElementById("wave");
-    const aliveEl = document.getElementById("alive");
-    const waveBtn = document.getElementById("waveBtn");
-
-    const CELL = 56;
-    const COLS = 16;
-    const ROWS = 10;
-    const MAP_X = 24;
-    const MAP_Y = 52;
-    const SIDE_X = MAP_X + COLS * CELL + 24;
-
-    const keys = {};
-
-    const path = [
-      [0,5],[1,5],[2,5],[3,5],[4,5],
-      [5,5],[5,4],[6,4],[7,4],[8,4],
-      [9,4],[9,5],[10,5],[11,5],[12,5],
-      [13,5],[14,5],[15,5]
-    ];
-
-    let wood, stone, baseHp, wave, gameOver;
-    let player, resources, towers, enemies, bullets;
-    let spawning, enemiesToSpawn, spawnTimer;
-    let message = "Gather resources, build towers, then start a wave.";
-
-    function isPathCell(c, r) {
-      return path.some(p => p[0] === c && p[1] === r);
-    }
-
-    function cellToWorld(c, r) {
-      return {
-        x: MAP_X + c * CELL + CELL / 2,
-        y: MAP_Y + r * CELL + CELL / 2
-      };
-    }
-
-    function worldToCell(x, y) {
-      return {
-        c: Math.floor((x - MAP_X) / CELL),
-        r: Math.floor((y - MAP_Y) / CELL)
-      };
-    }
-
-    function dist(a, b) {
-      return Math.hypot(a.x - b.x, a.y - b.y);
-    }
-
-    function reset() {
-      wood = 50;
-      stone = 25;
-      baseHp = 20;
-      wave = 0;
-      gameOver = false;
-      towers = [];
-      enemies = [];
-      bullets = [];
-      spawning = false;
-      enemiesToSpawn = 0;
-      spawnTimer = 0;
-      message = "Gather resources, build towers, then start a wave.";
-
-      player = {
-        x: MAP_X + CELL * 2,
-        y: MAP_Y + CELL * 2,
-        radius: 15,
-        speed: 4.2
-      };
-
-      resources = [
-        makeResource(2,1,"wood"), makeResource(4,2,"wood"), makeResource(7,1,"wood"),
-        makeResource(12,2,"wood"), makeResource(3,8,"wood"), makeResource(11,8,"wood"),
-        makeResource(1,7,"stone"), makeResource(6,7,"stone"), makeResource(10,1,"stone"),
-        makeResource(13,7,"stone"), makeResource(14,3,"stone")
-      ];
-
-      updateUI();
-    }
-
-    function makeResource(c, r, type) {
-      const p = cellToWorld(c, r);
-      return {
-        c, r, type,
-        x: p.x,
-        y: p.y,
-        amount: type === "wood" ? 35 : 25
-      };
-    }
-
-    function updateUI() {
-      woodEl.textContent = wood;
-      stoneEl.textContent = stone;
-      hpEl.textContent = baseHp;
-      waveEl.textContent = wave;
-      aliveEl.textContent = enemies.length + enemiesToSpawn;
-      waveBtn.disabled = spawning || enemies.length > 0 || gameOver;
-    }
-
-    function startWave() {
-      if (spawning || enemies.length > 0 || gameOver) return;
-      wave++;
-      enemiesToSpawn = 6 + wave * 3;
-      spawnTimer = 0;
-      spawning = true;
-      message = "Wave " + wave + " started!";
-      updateUI();
-    }
-
-    function spawnEnemy() {
-      const start = cellToWorld(path[0][0], path[0][1]);
-      enemies.push({
-        x: start.x - 40,
-        y: start.y,
-        radius: 15,
-        hp: 45 + wave * 15,
-        maxHp: 45 + wave * 15,
-        speed: 1.15 + wave * 0.08,
-        targetIndex: 0,
-        reward: 7 + wave
-      });
-    }
-
-    function gather() {
-      if (gameOver) return;
-      let best = null;
-      let bestDistance = Infinity;
-
-      for (const res of resources) {
-        const d = dist(player, res);
-        if (d < 72 && d < bestDistance) {
-          best = res;
-          bestDistance = d;
-        }
-      }
-
-      if (!best) {
-        message = "No resource nearby. Move closer to a tree or rock.";
-        return;
-      }
-
-      const gain = 10;
-      best.amount -= gain;
-      if (best.type === "wood") wood += gain;
-      else stone += gain;
-
-      message = "Gathered " + gain + " " + best.type + ".";
-      resources = resources.filter(r => r.amount > 0);
-      updateUI();
-    }
-
-    function buildTower(c, r) {
-      if (gameOver) return;
-      if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return;
-      if (isPathCell(c, r)) {
-        message = "You cannot build on the enemy path.";
-        return;
-      }
-      if (resources.some(res => res.c === c && res.r === r)) {
-        message = "Remove the resource first.";
-        return;
-      }
-      if (towers.some(t => t.c === c && t.r === r)) {
-        message = "There is already a tower here.";
-        return;
-      }
-      if (wood < 25 || stone < 10) {
-        message = "Not enough resources. Need 25 wood and 10 stone.";
-        return;
-      }
-
-      wood -= 25;
-      stone -= 10;
-      const p = cellToWorld(c, r);
-      towers.push({
-        c, r,
-        x: p.x,
-        y: p.y,
-        range: 150,
-        cooldown: 0,
-        fireRate: 42,
-        damage: 18
-      });
-      message = "Tower built.";
-      updateUI();
-    }
-
-    function updatePlayer() {
-      let dx = 0, dy = 0;
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) dx--;
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) dx++;
-      if (keys["ArrowUp"] || keys["w"] || keys["W"]) dy--;
-      if (keys["ArrowDown"] || keys["s"] || keys["S"]) dy++;
-
-      if (dx !== 0 || dy !== 0) {
-        const len = Math.hypot(dx, dy);
-        player.x += dx / len * player.speed;
-        player.y += dy / len * player.speed;
-      }
-
-      player.x = Math.max(MAP_X + player.radius, Math.min(MAP_X + COLS * CELL - player.radius, player.x));
-      player.y = Math.max(MAP_Y + player.radius, Math.min(MAP_Y + ROWS * CELL - player.radius, player.y));
-    }
-
-    function updateSpawning() {
-      if (!spawning) return;
-      spawnTimer--;
-      if (spawnTimer <= 0 && enemiesToSpawn > 0) {
-        spawnEnemy();
-        enemiesToSpawn--;
-        spawnTimer = Math.max(18, 55 - wave * 3);
-      }
-      if (enemiesToSpawn <= 0) spawning = false;
-    }
-
-    function updateEnemies() {
-      for (const enemy of enemies) {
-        const targetCell = path[enemy.targetIndex];
-        const target = cellToWorld(targetCell[0], targetCell[1]);
-        const dx = target.x - enemy.x;
-        const dy = target.y - enemy.y;
-        const d = Math.hypot(dx, dy);
-
-        if (d < enemy.speed + 1) {
-          enemy.x = target.x;
-          enemy.y = target.y;
-          enemy.targetIndex++;
-        } else {
-          enemy.x += dx / d * enemy.speed;
-          enemy.y += dy / d * enemy.speed;
-        }
-
-        if (enemy.targetIndex >= path.length) {
-          enemy.reachedBase = true;
-          baseHp--;
-          message = "An enemy hit the base!";
-        }
-      }
-
-      enemies = enemies.filter(e => !e.reachedBase && e.hp > 0);
-      if (baseHp <= 0) {
-        baseHp = 0;
-        gameOver = true;
-        message = "Game Over. The base was destroyed.";
-      }
-    }
-
-    function updateTowers() {
-      for (const tower of towers) {
-        if (tower.cooldown > 0) tower.cooldown--;
-        if (tower.cooldown > 0) continue;
-
-        let target = null;
-        let farthest = -1;
-
-        for (const enemy of enemies) {
-          const d = Math.hypot(enemy.x - tower.x, enemy.y - tower.y);
-          if (d <= tower.range && enemy.targetIndex > farthest) {
-            target = enemy;
-            farthest = enemy.targetIndex;
-          }
-        }
-
-        if (target) {
-          bullets.push({
-            x: tower.x,
-            y: tower.y,
-            target,
-            speed: 8,
-            damage: tower.damage
-          });
-          tower.cooldown = tower.fireRate;
-        }
-      }
-    }
-
-    function updateBullets() {
-      for (const b of bullets) {
-        if (!enemies.includes(b.target)) {
-          b.dead = true;
-          continue;
-        }
-        const dx = b.target.x - b.x;
-        const dy = b.target.y - b.y;
-        const d = Math.hypot(dx, dy);
-
-        if (d < b.speed + b.target.radius) {
-          b.target.hp -= b.damage;
-          b.dead = true;
-          if (b.target.hp <= 0) {
-            wood += b.target.reward;
-            if (Math.random() < 0.45) stone += Math.ceil(b.target.reward / 2);
-            message = "Enemy defeated. Resources gained.";
-          }
-        } else {
-          b.x += dx / d * b.speed;
-          b.y += dy / d * b.speed;
-        }
-      }
-
-      bullets = bullets.filter(b => !b.dead);
-    }
-
-    function checkWaveClear() {
-      if (!spawning && enemiesToSpawn === 0 && enemies.length === 0 && wave > 0 && !gameOver) {
-        message = "Wave cleared. Gather more resources and start the next wave.";
-      }
-    }
-
-    function update() {
-      if (gameOver) return;
-      updatePlayer();
-      updateSpawning();
-      updateEnemies();
-      updateTowers();
-      updateBullets();
-      checkWaveClear();
-      updateUI();
-    }
-
-    function drawRoundedRect(x, y, w, h, r, color) {
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.roundRect(x, y, w, h, r);
-      ctx.fill();
-    }
-
-    function drawMap() {
-      ctx.fillStyle = "#0f172a";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          const x = MAP_X + c * CELL;
-          const y = MAP_Y + r * CELL;
-          const pathHere = isPathCell(c, r);
-          ctx.fillStyle = pathHere ? "#92400e" : "#14532d";
-          ctx.fillRect(x, y, CELL, CELL);
-          ctx.strokeStyle = "rgba(255,255,255,0.08)";
-          ctx.strokeRect(x, y, CELL, CELL);
-
-          if (!pathHere) {
-            ctx.fillStyle = "rgba(255,255,255,0.04)";
-            ctx.beginPath();
-            ctx.arc(x + 12 + (c * 7) % 26, y + 16 + (r * 11) % 24, 2, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-      }
-
-      const base = cellToWorld(15,5);
-      drawRoundedRect(base.x - 22, base.y - 32, 44, 64, 10, "#38bdf8");
-      ctx.fillStyle = "white";
-      ctx.font = "bold 12px Arial";
-      ctx.textAlign = "center";
-      ctx.fillText("BASE", base.x, base.y + 4);
-    }
-
-    function drawResources() {
-      for (const res of resources) {
-        if (res.type === "wood") {
-          ctx.fillStyle = "#7c2d12";
-          ctx.fillRect(res.x - 7, res.y - 6, 14, 24);
-          ctx.fillStyle = "#22c55e";
-          ctx.beginPath();
-          ctx.arc(res.x, res.y - 16, 20, 0, Math.PI * 2);
-          ctx.fill();
-        } else {
-          ctx.fillStyle = "#94a3b8";
-          ctx.beginPath();
-          ctx.moveTo(res.x - 19, res.y + 14);
-          ctx.lineTo(res.x - 8, res.y - 17);
-          ctx.lineTo(res.x + 17, res.y - 10);
-          ctx.lineTo(res.x + 20, res.y + 12);
-          ctx.closePath();
-          ctx.fill();
-        }
-
-        ctx.fillStyle = "white";
-        ctx.font = "11px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(res.amount, res.x, res.y + 31);
-      }
-    }
-
-    function drawTowers() {
-      for (const t of towers) {
-        ctx.strokeStyle = "rgba(56,189,248,0.14)";
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, t.range, 0, Math.PI * 2);
-        ctx.stroke();
-
-        drawRoundedRect(t.x - 17, t.y - 17, 34, 34, 8, "#64748b");
-        ctx.fillStyle = "#f8fafc";
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, 8, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function drawEnemies() {
-      for (const e of enemies) {
-        ctx.fillStyle = "#ef4444";
-        ctx.beginPath();
-        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "rgba(0,0,0,0.45)";
-        ctx.fillRect(e.x - 18, e.y - 28, 36, 5);
-        ctx.fillStyle = "#22c55e";
-        ctx.fillRect(e.x - 18, e.y - 28, 36 * Math.max(0, e.hp / e.maxHp), 5);
-      }
-    }
-
-    function drawBullets() {
-      ctx.fillStyle = "#facc15";
-      for (const b of bullets) {
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, 5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    function drawPlayer() {
-      ctx.fillStyle = "#818cf8";
-      ctx.beginPath();
-      ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "white";
-      ctx.beginPath();
-      ctx.arc(player.x - 5, player.y - 3, 3, 0, Math.PI * 2);
-      ctx.arc(player.x + 5, player.y - 3, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function drawSidePanel() {
-      drawRoundedRect(SIDE_X, MAP_Y, 190, ROWS * CELL, 18, "rgba(15,23,42,0.92)");
-
-      ctx.textAlign = "left";
-      ctx.fillStyle = "white";
-      ctx.font = "bold 20px Arial";
-      ctx.fillText("Build Menu", SIDE_X + 18, MAP_Y + 36);
-
-      ctx.font = "14px Arial";
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillText("Click grass tile", SIDE_X + 18, MAP_Y + 70);
-      ctx.fillText("to build a tower.", SIDE_X + 18, MAP_Y + 92);
-
-      drawRoundedRect(SIDE_X + 20, MAP_Y + 120, 56, 56, 12, "#64748b");
-      ctx.fillStyle = "#f8fafc";
-      ctx.beginPath();
-      ctx.arc(SIDE_X + 48, MAP_Y + 148, 11, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = "white";
-      ctx.font = "bold 15px Arial";
-      ctx.fillText("Basic Tower", SIDE_X + 86, MAP_Y + 142);
-      ctx.font = "13px Arial";
-      ctx.fillStyle = "#cbd5e1";
-      ctx.fillText("Cost: 25 wood", SIDE_X + 86, MAP_Y + 164);
-      ctx.fillText("+ 10 stone", SIDE_X + 86, MAP_Y + 184);
-
-      ctx.fillStyle = "white";
-      ctx.font = "bold 16px Arial";
-      ctx.fillText("Status", SIDE_X + 18, MAP_Y + 250);
-      ctx.font = "13px Arial";
-      ctx.fillStyle = "#cbd5e1";
-      wrapText(message, SIDE_X + 18, MAP_Y + 278, 154, 18);
-
-      if (gameOver) {
-        ctx.fillStyle = "#fecaca";
-        ctx.font = "bold 19px Arial";
-        ctx.fillText("GAME OVER", SIDE_X + 18, MAP_Y + 430);
-        ctx.fillStyle = "#cbd5e1";
-        ctx.font = "13px Arial";
-        ctx.fillText("Refresh page to retry.", SIDE_X + 18, MAP_Y + 456);
-      }
-    }
-
-    function wrapText(text, x, y, maxWidth, lineHeight) {
-      const words = text.split(" ");
-      let line = "";
-      for (let i = 0; i < words.length; i++) {
-        const testLine = line + words[i] + " ";
-        if (ctx.measureText(testLine).width > maxWidth && i > 0) {
-          ctx.fillText(line, x, y);
-          line = words[i] + " ";
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, x, y);
-    }
-
-    function draw() {
-      drawMap();
-      drawResources();
-      drawTowers();
-      drawEnemies();
-      drawBullets();
-      drawPlayer();
-      drawSidePanel();
-    }
-
-    function loop() {
-      update();
-      draw();
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener("keydown", e => {
-      keys[e.key] = true;
-      if (e.key === "e" || e.key === "E") gather();
-    });
-
-    window.addEventListener("keyup", e => {
-      keys[e.key] = false;
-    });
-
-    canvas.addEventListener("click", e => {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-      const cell = worldToCell(x, y);
-      buildTower(cell.c, cell.r);
-    });
-
-    waveBtn.addEventListener("click", startWave);
-
-    reset();
-    loop();
-  </script>
+<header class="topbar">
+<div class="brand">
+<div class="logo">11</div>
+<div>
+<h1>Tạo đềthi Toán 11 HK2</h1>
+<p>Chọn sốcâu theo dạng và chuyên đề, sau đó xuất đềra PDF.</p>
+</div>
+</div>
+<div class="top-actions">
+<button class="btn btn-ghost" id="resetBtn" type="button">Đặt lại</button>
+<button class="btn btn-primary" id="createBtn" type="button">Tạo đề</button>
+</div>
+</header>
+<main class="layout">
+<section class="panel">
+<h2>Thiết lập đề</h2>
+<div class="settings-grid">
+<label class="field">
+<span>Tên đề</span>
+<input id="examTitle" type="text" value="ĐỀKIỂM TRA TOÁN 11 - HỌC KỲ 2" />
+</label>
+<label class="field">
+<span>Mã đề</span>
+<input id="examCode" type="text" value="101" />
+</label>
+<label class="checkline">
+<input id="shuffleQuestions" type="checkbox" checked />
+<span>Trộn thứ tự câu hỏi</span>
+</label>
+<label class="checkline">
+<input id="showAnswer" type="checkbox" />
+<span>Xuất kèm đáp án và lời giải</span>
+</label>
+</div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>PHẦN I. Trắc nghiệm</h2>
+<span id="tnTotal" class="badge">0 câu</span>
+</div>
+<div class="topic-grid" id="tracNghiemBox"></div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>PHẦN II. Đúng / Sai</h2>
+<span id="dsTotal" class="badge">0 câu</span>
+</div>
+<div class="topic-grid" id="dungSaiBox"></div>
+</section>
+<section class="panel">
+<div class="section-title">
+<h2>PHẦN III. Trả lời ngắn</h2>
+<span id="tlnTotal" class="badge">0 câu</span>
+</div>
+<div class="topic-grid" id="traLoiNganBox"></div>
+</section>
+<section class="panel muted-panel">
+<h2>Ghi chú</h2>
+<p>
+Muốn thêm câu hỏi, mở file <b>assets/js/data.js</b> rồi thêm object mới vào mảng
+<b>QUESTIONS</b>. Web này chạy trực tiếp bằng GitHub Pages, không cần server.
+</p>
+</section>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
 </body>
 </html>
