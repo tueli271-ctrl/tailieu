@@ -1,87 +1,129 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tạo đềthi Toán 11 HK2</title>
-<link rel="stylesheet" href="assets/css/style.css" />
-<script>
-window.MathJax = {
-tex: {
-inlineMath: [["\\(", "\\)"], ["$", "$"]],
-displayMath: [["\\[", "\\]"]]
-},
-svg: { fontCache: "global" }
-};
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tạo đề thi Toán 11 HK2</title>
+
+  <!-- File giao diện -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+
+  <!-- Cấu hình MathJax để hiển thị công thức Toán -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["\\(", "\\)"], ["$", "$"]],
+        displayMath: [["\\[", "\\]"]]
+      },
+      svg: {
+        fontCache: "global"
+      }
+    };
+  </script>
+
+  <!-- Thư viện MathJax -->
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
+
 <body>
-<header class="topbar">
-<div class="brand">
-<div class="logo">11</div>
-<div>
-<h1>Tạo đềthi Toán 11 HK2</h1>
-<p>Chọn sốcâu theo dạng và chuyên đề, sau đó xuất đềra PDF.</p>
-</div>
-</div>
-<div class="top-actions">
-<button class="btn btn-ghost" id="resetBtn" type="button">Đặt lại</button>
-<button class="btn btn-primary" id="createBtn" type="button">Tạo đề</button>
-</div>
-</header>
-<main class="layout">
-<section class="panel">
-<h2>Thiết lập đề</h2>
-<div class="settings-grid">
-<label class="field">
-<span>Tên đề</span>
-<input id="examTitle" type="text" value="ĐỀKIỂM TRA TOÁN 11 - HỌC KỲ 2" />
-</label>
-<label class="field">
-<span>Mã đề</span>
-<input id="examCode" type="text" value="101" />
-</label>
-<label class="checkline">
-<input id="shuffleQuestions" type="checkbox" checked />
-<span>Trộn thứ tự câu hỏi</span>
-</label>
-<label class="checkline">
-<input id="showAnswer" type="checkbox" />
-<span>Xuất kèm đáp án và lời giải</span>
-</label>
-</div>
-</section>
-<section class="panel">
-<div class="section-title">
-<h2>PHẦN I. Trắc nghiệm</h2>
-<span id="tnTotal" class="badge">0 câu</span>
-</div>
-<div class="topic-grid" id="tracNghiemBox"></div>
-</section>
-<section class="panel">
-<div class="section-title">
-<h2>PHẦN II. Đúng / Sai</h2>
-<span id="dsTotal" class="badge">0 câu</span>
-</div>
-<div class="topic-grid" id="dungSaiBox"></div>
-</section>
-<section class="panel">
-<div class="section-title">
-<h2>PHẦN III. Trả lời ngắn</h2>
-<span id="tlnTotal" class="badge">0 câu</span>
-</div>
-<div class="topic-grid" id="traLoiNganBox"></div>
-</section>
-<section class="panel muted-panel">
-<h2>Ghi chú</h2>
-<p>
-Muốn thêm câu hỏi, mở file <b>assets/js/data.js</b> rồi thêm object mới vào mảng
-<b>QUESTIONS</b>. Web này chạy trực tiếp bằng GitHub Pages, không cần server.
-</p>
-</section>
-</main>
-<script src="assets/js/data.js"></script>
-<script src="assets/js/app.js"></script>
+  <!-- Thanh tiêu đề -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">11</div>
+
+      <div>
+        <h1>Tạo đề thi Toán 11 HK2</h1>
+        <p>Chọn số câu theo dạng và chuyên đề, sau đó xuất đề ra PDF.</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <button class="btn btn-ghost" id="resetBtn" type="button">Đặt lại</button>
+      <button class="btn btn-primary" id="createBtn" type="button">Tạo đề</button>
+    </div>
+  </header>
+
+  <!-- Nội dung chính -->
+  <main class="layout">
+
+    <!-- Thiết lập đề -->
+    <section class="panel">
+      <h2>Thiết lập đề</h2>
+
+      <div class="settings-grid">
+        <label class="field">
+          <span>Tên đề</span>
+          <input
+            id="examTitle"
+            type="text"
+            value="ĐỀ KIỂM TRA TOÁN 11 - HỌC KỲ 2"
+          />
+        </label>
+
+        <label class="field">
+          <span>Mã đề</span>
+          <input id="examCode" type="text" value="101" />
+        </label>
+
+        <label class="checkline">
+          <input id="shuffleQuestions" type="checkbox" checked />
+          <span>Trộn thứ tự câu hỏi</span>
+        </label>
+
+        <label class="checkline">
+          <input id="showAnswer" type="checkbox" />
+          <span>Xuất kèm đáp án và lời giải</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- Phần I: Trắc nghiệm -->
+    <section class="panel">
+      <div class="section-title">
+        <h2>PHẦN I. Trắc nghiệm</h2>
+        <span id="tnTotal" class="badge">0 câu</span>
+      </div>
+
+      <div class="topic-grid" id="tracNghiemBox"></div>
+    </section>
+
+    <!-- Phần II: Đúng sai -->
+    <section class="panel">
+      <div class="section-title">
+        <h2>PHẦN II. Đúng / Sai</h2>
+        <span id="dsTotal" class="badge">0 câu</span>
+      </div>
+
+      <div class="topic-grid" id="dungSaiBox"></div>
+    </section>
+
+    <!-- Phần III: Trả lời ngắn -->
+    <section class="panel">
+      <div class="section-title">
+        <h2>PHẦN III. Trả lời ngắn</h2>
+        <span id="tlnTotal" class="badge">0 câu</span>
+      </div>
+
+      <div class="topic-grid" id="traLoiNganBox"></div>
+    </section>
+
+    <!-- Ghi chú -->
+    <section class="panel muted-panel">
+      <h2>Ghi chú</h2>
+
+      <p>
+        Muốn thêm câu hỏi, mở file <b>assets/js/data.js</b> rồi thêm object mới
+        vào mảng <b>QUESTIONS</b>. Web này chạy trực tiếp bằng GitHub Pages,
+        không cần server.
+      </p>
+    </section>
+  </main>
+
+  <!-- File dữ liệu câu hỏi: phải đặt trước app.js -->
+  <script src="assets/js/data.js"></script>
+
+  <!-- File xử lý trang index -->
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
